@@ -1,0 +1,59 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+
+
+# Generated Files
+**/.generated.*
+graph/**/*.generated.*  # More specific for gqlgen
+
+# Compiled Binaries
+bin/*
+*_test
+
+# Vendor Directory (Optional)
+vendor/  # Uncomment if using Go modules and want to ignore vendor directory
+
+
+# OS Specific Temporary Files
+*.tmp
+*.temp
+*.log
+
+# Dependency Lock Files
+node_modules/
+package-lock.json
+yarn.lock
+
+# IDE Specific Files
+# (For example, Visual Studio Code)
+.vscode/
+
+# Testing Coverage Reports
+coverage/
+
+# Local Environment Files
+.env
+.env.prod
+
+# Database Files
+.db*
+
+# gqlgen Cache
+.gqlgen.cache
+resolver/*.resolvers.go  # For older gqlgen versions

@@ -1,0 +1,20 @@
+type Venue {
+    _key:String!
+    _id:String!
+    _rev:String!
+    address: String!
+    lat: String!
+    lng: String!
+}
+
+input InputVenue {
+    _key:String!
+    _id:String!
+    _rev:String!
+    address: String!
+    lat: String!
+    lng: String!
+}
+
+
+

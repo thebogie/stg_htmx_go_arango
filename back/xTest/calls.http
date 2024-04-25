@@ -1,0 +1,186 @@
+
+
+
+####
+GRAPHQL https://smacktalkgaming.com/graphql
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwMDI4MzQyNn0.yGJ12K17ZMLck_TmsMRlhXyTqgZRkBTkmUGKfi42JQA
+
+query  Game {
+    games { name }
+}
+{}
+
+
+
+##################
+GRAPHQL http://localhost:50002/query
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwNjA0OTcxN30.kFIxZdvwmLvqQnx62kxG4xBbiUxlG07ae_WmEKJvLFg
+
+query IntrospectionQuery {
+    __schema {
+    types {
+      name
+      description
+      fields {
+        name
+        description
+      }
+    }
+  }
+}
+####
+GRAPHQL http://localhost:50002/graphql
+#Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwMDI4MzQyNn0.yGJ12K17ZMLck_TmsMRlhXyTqgZRkBTkmUGKfi42JQA
+
+mutation LoginUser($input: Login!) {
+    LoginUser(input: $input) {
+        token
+        userdata {
+            _key
+            _id
+            _rev
+            firstname
+            email
+        }
+    }
+}
+{
+  "input": {
+    "username": "mitch@gmail.com",
+    "password": "letmein"
+  }
+}
+
+####
+GRAPHQL http://localhost:50002/graphql
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNDA1NDMxNX0.O7TLlhoPt5SlvXpJdrYKjUASx_dBek4Ht9xqTYJ1ATI
+
+query  Game {
+Games { name }
+}
+{}
+
+####
+GRAPHQL http://localhost:50002/graphql
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwNjIyMTY5MH0.i_kw5C1HmVm22nc9h3r37AXNNj7n6nG0avDUjMKxnGU
+
+query  GetContestsPlayerTotalResults($player: String! ) {
+GetContestsPlayerTotalResults(player : $player)
+ {
+_id
+     outcomes {
+         _id
+     }
+     games {
+         _id
+     }
+     venue {
+         _id
+     }
+
+
+}
+
+
+}
+
+{"player": "player/202312291853567769250600"}
+
+
+
+####
+GRAPHQL http://localhost:50002/graphql
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwODU0MDM1Nn0.KC3mQ9yOxfVbPUXeXE-Aqb8GeEmAglIAc6xkaJpGpGI
+
+
+mutation CreateContest($contest: InputContest!) {
+    CreateContest(contest: $contest)
+
+
+
+}
+{
+  "contest": {
+    "_key": "",
+    "_id": "",
+    "_rev": "",
+    "start": "2024-02-02T15:00:00",
+    "startoffset": "-05:00",
+    "stop": "2024-02-02T18:00:00",
+    "stopoffset": "-05:00",
+    "outcomes": [
+      {
+        "_key": "",
+        "_id": "",
+        "_rev": "",
+        "place": "1",
+        "result": "won",
+        "player": {
+          "_key": "",
+          "_id": "",
+          "_rev": "",
+          "firstname": "John Doe",
+          "email": "mitch@gmail.com",
+          "password": ""
+        }
+      },
+      {
+        "_key": "",
+        "_id": "",
+        "_rev": "",
+        "place": "2",
+        "result": "lost",
+        "player": {
+          "_key": "",
+          "_id": "",
+          "_rev": "",
+          "firstname": "John Doe",
+          "email": "lily@gmail.com",
+          "password": ""
+        }
+      },
+      {
+        "_key": "",
+        "_id": "",
+        "_rev": "",
+        "place": "3",
+        "result": "lost",
+        "player": {
+          "_key": "",
+          "_id": "",
+          "_rev": "",
+          "firstname": "John Doe",
+          "email": "olivia@gmail.com",
+          "password": ""
+        }
+      }
+    ],
+    "games": [
+      {
+        "_key": "",
+        "_id": "",
+        "_rev": "",
+        "name": "7 Wonders"
+      },
+      {
+        "_key": "",
+        "_id": "",
+        "_rev": "",
+        "name": "War Chest"
+      }
+    ],
+    "venue": {
+      "_key": "",
+      "_id": "",
+      "_rev": "",
+      "address": "123 Main St, Anytown, CA",
+      "lat": "37.7749",
+      "lng": "-122.4194"
+    }
+  }
+}
+
+
+
+
+

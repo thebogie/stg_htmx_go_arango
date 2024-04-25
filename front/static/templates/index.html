@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+          integrity="sha512-UJfAaOlIRtdR+0P6C3KUoTDAxVTuy3lnSXLyLKlHYJlcSU8Juge/mjeaxDNMlw9LgeIotgz5FP8eUQPhX1q10A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="icon" type="favicon.ico" href="static/favicon.ico">
+    <meta charset="UTF-8">
+    <h1>{{.Title}}</h1>
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+            integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+            crossorigin="anonymous"></script>
+</head>
+
+<nav>
+    <a href="/front/static">Home</a>
+
+    <a hx-get="/player/login" hx-target="#login-modal" >Login</a>
+</nav>
+<body>
+<main>
+
+<div id="login-modal" >
+
+</div>
+
+</main>
+</body>
+</html>

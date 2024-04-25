@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="BACK_" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="stg_htmx_go_arango" />
+    <working_directory value="$PROJECT_DIR$/back" />
+    <kind value="FILE" />
+    <package value="back" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/back/app/server.go" />
+    <method v="2">
+      <option name="GoBeforeRunTask" command="run github.com/99designs/gqlgen generate ." />
+    </method>
+  </configuration>
+</component>

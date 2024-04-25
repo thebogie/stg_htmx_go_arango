@@ -1,0 +1,19 @@
+type  Outcome {
+    _key:String!
+    _id:String!
+    _rev:String!
+    player:UserData!
+    place: String!
+    result: String!
+}
+
+input  InputOutcome {
+    _key:String!
+    _id:String!
+    _rev:String!
+    player:InputUserData!
+    place: String!
+    result: String!
+}
+
+
