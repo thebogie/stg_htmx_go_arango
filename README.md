@@ -2,8 +2,8 @@
 # Smacktalk Gaming
 
 full stack web application 
-- frontend = sveltekit
-- backend = go
+- frontend = htmx + go templates + golang
+- backend = graphql + golang
 - database = arango
 
 
