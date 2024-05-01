@@ -1,14 +1,15 @@
 package main
 
 import (
-	"encoding/gob"
+	"context"
 	"fmt"
 	"front/pkg/api"
 	"front/pkg/middle"
-	"front/pkg/types"
+	"front/pkg/services"
 	"front/pkg/utils"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/gorilla/sessions"
 	"html/template"
 	"net/http"
@@ -19,15 +20,34 @@ import (
 
 func main() {
 
-	var secretKey = []byte(utils.GetConfig().GetString("STG_SESSIONS_KEY")) // Replace with a strong, random key
-	store := sessions.NewCookieStore(secretKey)
+	graphqlClient := services.InitGraphQL("http://localhost:50002")
+	redisClient, _ := services.InitRedis()
+
+	// Initialize the session store
+	middle.InitSession()
+
+	// Create a new context with the clients
+	ctx := context.Background()
+	ctx = utils.WithRedisClient(ctx, redisClient)
+	ctx = utils.WithGraphQLClient(ctx, graphqlClient)
 
 	// Create a new Chi router
 	r := chi.NewRouter()
 
 	// Add stg-middleware (optional)
 	r.Use(middleware.Logger) // Logs requests to the console
-	r.Use(middle.SessionMiddleware(store))
+	r.Use(middle.SessionMiddleware)
+
+	r.Use(cors.Handler(cors.Options{
+		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins: []string{"https://*", "http://*"},
+		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	}))
 	// Create a route along /files that will serve contents from
 	// the ./static/ folder.
 	workDir, _ := os.Getwd()
@@ -39,25 +59,16 @@ func main() {
 
 	// Define routes
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		session := r.Context().Value("session").(*sessions.Session)
 
-		player := types.Player{Firstname: "", Email: "FISH", Password: "", AccessToken: ""}
-		gob.Register(types.Player{}) // Register Player struct locally
-		session.Values["currentPlayer"] = player
-
-		err := session.Save(r, w)
-		if err != nil {
-			// Handle error appropriately (e.g., log the error or return an error to the client)
-			http.Error(w, "Failed to save session", http.StatusInternalServerError)
-			return
-		}
+		test := r.Context().Value("session").(*sessions.Session)
+		fmt.Println("TEST" + test.ID)
 
 		data := struct {
 			Title string
 		}{
 			Title: "My Front Page",
 		}
-		err = templates.ExecuteTemplate(w, "index.html", data)
+		err := templates.ExecuteTemplate(w, "index.html", data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

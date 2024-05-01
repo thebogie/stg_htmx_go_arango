@@ -1,5 +1,13 @@
 version: "3.5"
 services:
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "50004:6379"
+    restart: always
+
   arangodb:
     image: arangodb:latest
     restart: always

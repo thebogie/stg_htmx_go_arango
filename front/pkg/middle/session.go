@@ -2,24 +2,86 @@ package middle
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/gob"
+	"front/pkg/types"
+	"github.com/boj/redistore"
 	"github.com/gorilla/sessions"
+	"math/rand"
 	"net/http"
 )
 
-func SessionMiddleware(store sessions.Store) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			session, err := store.Get(r, "stg-session") // Replace with your session name
-			if err != nil {
-				// Handle error (e.g. create new session)
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
-			defer session.Save(r, w) // Save session data after request
+// Store is the session store
+var Store *redistore.RediStore
 
-			// Add session to request context for access in handlers
-			ctx := context.WithValue(r.Context(), "session", session)
-			next.ServeHTTP(w, r.WithContext(ctx))
-		})
+// Init initializes the session store
+func InitSession() {
+	gob.Register(&types.Player{})
+
+	var err error
+	Store, err = redistore.NewRediStore(10, "tcp", "localhost:50004", "", []byte("secret-key"))
+	if err != nil {
+		panic(err)
 	}
 }
+
+// Middleware is the session middleware
+func SessionMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		session, err := Store.Get(r, "session-id")
+		if err != nil {
+			// Handle the error
+			return
+		}
+
+		// Check if the session is new
+		if session.IsNew {
+			// Generate a new session ID
+			//session.Values["user_id"] = generateUniqueID()
+			session.Values["currentPlayer"] = types.Player{
+				Firstname:   "empty",
+				Email:       "empty",
+				Password:    "",
+				AccessToken: "",
+			}
+			err := session.Save(r, w)
+			if err != nil {
+				panic(err)
+				return
+			}
+		}
+
+		ctx := r.Context()
+		ctx = context.WithValue(ctx, "session", session)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+// GetSession retrieves the session from the request context
+func GetSession(r *http.Request) *sessions.Session {
+	return r.Context().Value("session").(*sessions.Session)
+}
+
+// GetUserID retrieves the user ID from the request context
+func GetUserID(r *http.Request) string {
+	return r.Context().Value("userID").(string)
+}
+
+// getUserID generates a unique user ID for the request
+func generateUniqueID(r *http.Request) string {
+
+	b := make([]byte, 32)
+	_, err := rand.Read(b)
+	if err != nil {
+		panic("Rand didnt work in generateID???")
+	}
+
+	// Encode the random sequence as a URL-safe base64 string
+	return base64.URLEncoding.EncodeToString(b)
+}
+
+const (
+	sessionName       = "stg_session"
+	sessionContextKey = "stg_session_store"
+)
