@@ -1,5 +1,18 @@
 package types
 
+type LoginUserAPI struct {
+	LoginUser struct {
+		Token    string `json:"token"`
+		Userdata struct {
+			Id        string `json:"_id"`
+			Key       string `json:"_key"`
+			Rev       string `json:"_rev"`
+			Email     string `json:"email"`
+			Firstname string `json:"firstname"`
+		} `json:"userdata"`
+	} `json:"LoginUser"`
+}
+
 type Player struct {
 	Firstname   string `json:"firstname"`
 	Email       string `json:"email"`

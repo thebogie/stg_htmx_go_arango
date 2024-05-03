@@ -6,19 +6,28 @@
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <link rel="icon" type="favicon.ico" href="static/favicon.ico">
     <meta charset="UTF-8">
-    <h1>{{.Title}}</h1>
+    <title>{{.Title}}</title>
     <script src="https://unpkg.com/htmx.org@1.9.6"
             integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
             crossorigin="anonymous"></script>
 </head>
-
+<div>
+    <h3>Smacktalk Gaming</h3>
 <nav>
-    <a href="/front/static">Home</a>
-
+    <a href="/">Home</a>
     <a hx-get="/player/login" hx-target="#login-modal" >Login</a>
 </nav>
+</div>
 <body>
 <main>
+    {{ if  .User.Email }}
+    <div id="user-info">
+
+
+        <p>Hello, {{ .User }}</p>
+
+    </div>
+    {{ end }}
 
 <div id="login-modal" >
 

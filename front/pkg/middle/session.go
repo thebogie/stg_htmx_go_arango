@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/gob"
+	"fmt"
+	"front/pkg/services"
 	"front/pkg/types"
 	"github.com/boj/redistore"
 	"github.com/gorilla/sessions"
@@ -26,6 +28,7 @@ func InitSession() {
 }
 
 // Middleware is the session middleware
+
 func SessionMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -36,7 +39,7 @@ func SessionMiddleware(next http.Handler) http.Handler {
 		}
 
 		// Check if the session is new
-		if session.IsNew {
+		if session.IsNew || session.Values["currentPlayer"] == nil {
 			// Generate a new session ID
 			//session.Values["user_id"] = generateUniqueID()
 			session.Values["currentPlayer"] = types.Player{
@@ -54,6 +57,7 @@ func SessionMiddleware(next http.Handler) http.Handler {
 
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, "session", session)
+		ctx = services.WithGraphQLClient(ctx, services.InitGraphQL("http://localhost:50002/graphql"))
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
@@ -64,8 +68,19 @@ func GetSession(r *http.Request) *sessions.Session {
 }
 
 // GetUserID retrieves the user ID from the request context
-func GetUserID(r *http.Request) string {
-	return r.Context().Value("userID").(string)
+func GetCurrentPlayer(r *http.Request) *types.Player {
+	retVal := &types.Player{}
+	session := r.Context().Value("session").(*sessions.Session)
+	currentPlayer := session.Values["currentPlayer"]
+
+	_, ok := currentPlayer.(*types.Player)
+	if currentPlayer != nil && !ok {
+		fmt.Errorf("Unexpected value for currentPlayer: %T", currentPlayer)
+
+	}
+
+	retVal = currentPlayer.(*types.Player)
+	return retVal
 }
 
 // getUserID generates a unique user ID for the request

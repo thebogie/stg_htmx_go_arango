@@ -47,3 +47,9 @@ func (r *RedisClient) Get(key string) (string, error) {
 	}
 	return val, nil
 }
+
+type redisClientKey struct{}
+
+func WithRedisClient(ctx context.Context, client *RedisClient) context.Context {
+	return context.WithValue(ctx, redisClientKey{}, client)
+}

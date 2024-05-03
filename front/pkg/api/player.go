@@ -1,12 +1,13 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
+	"front/pkg/services"
 	"front/pkg/types"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/gorilla/sessions"
-	"github.com/machinebox/graphql"
 	"html/template"
 	"log"
 	"net/http"
@@ -29,16 +30,13 @@ func NewAPIRouter() chi.Router {
 	router.Get("/login", func(w http.ResponseWriter, r *http.Request) {
 
 		session := r.Context().Value("session").(*sessions.Session)
-		currentPlayerI := session.Values["currentPlayer"]
+		currentPlayer := session.Values["currentPlayer"]
 
-		player, ok := currentPlayerI.(*types.Player)
-		if !ok {
+		_, ok := currentPlayer.(*types.Player)
+		if currentPlayer != nil && !ok {
 			fmt.Println("Error: Unexpected value for currentPlayer")
 			return
 		}
-
-		fmt.Println("Player Email:", player.Email)
-		fmt.Println("Player Firstname:", player.Firstname)
 
 		data := struct {
 			Title string
@@ -54,36 +52,71 @@ func NewAPIRouter() chi.Router {
 	})
 
 	router.Post("/auth", func(w http.ResponseWriter, r *http.Request) {
-		//session := r.Context().Value("session").(*sessions.Session)
-		//currentPlayerI := session.Values["currentPlayer"]
+		ctx := r.Context()
+		session := r.Context().Value("session").(*sessions.Session)
 
-		query, err := os.ReadFile("pkg/graphql/login.graphql")
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		err = r.ParseForm()
+		// "input": {    "username": "mitch@gmail.com",    "password": "letmein"  }
+		err := r.ParseForm()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		//build graphql request
-		req := graphql.NewRequest(string(query))
+		gql, ok := services.GraphqlClientFromContext(ctx)
+		if !ok {
+			fmt.Println("Error: Unexpected graphql client not found")
+			return
+		}
+
+		query, err := os.ReadFile("pkg/graphql/login.graphql")
+		if err != nil {
+			log.Fatal(err)
+		}
 		variables := map[string]interface{}{
 			"input": map[string]interface{}{
 				"username": r.FormValue("email"),
 				"password": r.FormValue("password"),
 			},
 		}
-		req.Var("input", variables["input"])
-
-		data := struct {
-			Title string
-		}{
-			Title: "Auth",
+		//req.Var("input", variables["input"])
+		var result []byte
+		result = []byte{}
+		err = gql.Query(ctx, string(query), variables, &result)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
 		}
-		err = templates.ExecuteTemplate(w, "auth.html", data)
+
+		// Unmarshal the JSON data into the LoginUser Graphql struct
+		var loginUser types.LoginUserAPI
+		err = json.Unmarshal(result, &loginUser)
+		if err != nil {
+			fmt.Println("Error unmarshalling JSON:", err)
+			return
+		}
+
+		session.Values["currentPlayer"] = types.Player{
+			Firstname:   loginUser.LoginUser.Userdata.Firstname,
+			Email:       loginUser.LoginUser.Userdata.Email,
+			Password:    "",
+			AccessToken: loginUser.LoginUser.Token,
+		}
+		err = session.Save(r, w)
+		if err != nil {
+			panic(err)
+			return
+		}
+
+		// Parse templates
+		templates := template.Must(template.ParseFiles("static/templates/layout.html", "static/templates/index.html"))
+		data := types.HeaderInfo{
+			Title: "Smacktalk Gaming",
+			User: types.HeaderUser{
+				Email:     loginUser.LoginUser.Userdata.Email,
+				Firstname: "",
+			},
+		}
+		err = templates.ExecuteTemplate(w, "index.html", data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
