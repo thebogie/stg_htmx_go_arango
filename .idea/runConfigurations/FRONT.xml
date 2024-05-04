@@ -3,6 +3,7 @@
     <module name="stg_htmx_go_arango" />
     <working_directory value="$PROJECT_DIR$/front" />
     <kind value="FILE" />
+    <package value="front" />
     <directory value="$PROJECT_DIR$/front" />
     <filePath value="$PROJECT_DIR$/front/main.go" />
     <method v="2" />

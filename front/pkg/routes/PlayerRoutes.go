@@ -39,7 +39,7 @@ func PlayerAuth(w http.ResponseWriter, r *http.Request) {
 
 	gql, ok := services.GraphqlClientFromContext(ctx)
 	if !ok {
-		fmt.Println("Error: Unexpected graphql client not found")
+		fmt.Println("Error: the Unexpected graphql client not found")
 		return
 	}
 
@@ -70,6 +70,22 @@ func PlayerAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// failed login send back error
+	if loginUser.LoginUser.Token == "" {
+		var responseHTML string
+
+		responseHTML = "<div class='red-text'> Error: Invalid email or password.</div>"
+
+		// Set the response content type to HTML
+		w.Header().Set("Content-Type", "text/html")
+
+		// Write the login response to the response body
+		//w.WriteHeader(http.StatusUnprocessableEntity)
+		w.Write([]byte(responseHTML))
+		return
+
+	}
+
 	session.Values["currentPlayer"] = types.Player{
 		Firstname:   loginUser.LoginUser.Userdata.Firstname,
 		Email:       loginUser.LoginUser.Userdata.Email,
@@ -84,7 +100,10 @@ func PlayerAuth(w http.ResponseWriter, r *http.Request) {
 
 	// Parse templates
 	// Redirect to target URL
-	http.Redirect(w, r, "/", http.StatusFound)
+	//w.Header().Set("Content-Type", "text/html")
+	//http.Redirect(w, r, "/", http.StatusFound)
+	w.Header().Set("HX-Redirect", "/")
+	w.WriteHeader(http.StatusOK)
 
 }
 

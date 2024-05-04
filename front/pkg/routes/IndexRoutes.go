@@ -27,7 +27,10 @@ func mainPage(w http.ResponseWriter, r *http.Request) {
 	currentPlayer := middle.GetCurrentPlayer(r)
 
 	// Parse templates
-	templates := template.Must(template.ParseFiles("static/templates/layout.html", "static/templates/index.html"))
+	templates := template.Must(template.ParseFiles(
+		"static/templates/layout.html",
+		"static/templates/nav.html",
+		"static/templates/index.html"))
 
 	test := r.Context().Value("session").(*sessions.Session)
 	fmt.Println("TEST" + test.ID)

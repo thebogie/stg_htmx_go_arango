@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+          integrity="sha512-UJfAaOlIRtdR+0P6C3KUoTDAxVTuy3lnSXLyLKlHYJlcSU8Juge/mjeaxDNMlw9LgeIotgz5FP8eUQPhX1q10A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="icon" type="favicon.ico" href="static/favicon.ico">
+    <meta charset="UTF-8">
+    <title>{{.Title}}</title>
+    <script src="https://unpkg.com/htmx.org@1.9.6"
+            integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni"
+            crossorigin="anonymous"></script>
+
+    <script>
+        //   window.onload = function() {
+        //     $('#login-modal').modal('hide');
+        //  };
+    </script>
+</head>
+
+<body>
+<header>
+    <nav>
+        {{ template "nav.html" . }}
+    </nav>
+</header>
+
+
+<main>
+    {{ template "content" . }}
+</main>
+
+<footer>
+</footer>
+</body>
+</html>
