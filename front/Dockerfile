@@ -1,17 +1,31 @@
 # builder image
-FROM golang:1.21
+FROM golang:latest
+
+# Install Redis
+RUN apt-get update && apt-get install -y redis-server
+
+# Install curl
+RUN apt-get install -y curl
+
 
 WORKDIR /stg
 
-COPY go.mod go.sum ./
-RUN go mod download
-
 COPY . .
-#RUN go mod tidy; go run github.com/99designs/gqlgen generate .
-RUN go run github.com/99designs/gqlgen generate .
+RUN go mod download
+RUN go build -o main .
 
-RUN  CGO_ENABLED=0 GOOS=linux go build -a -o runbackend.go  ./app/server.go
 
-EXPOSE 50002
+# Expose the Redis + app port
+EXPOSE 50003
+EXPOSE 6379
 
-CMD ["./runbackend.go"]
+# Set the command to run your Go application
+#CMD ["sleep", "300"]
+WORKDIR /stg
+
+#CMD ["sleep", "3000"]
+CMD ["sh", "-c", "redis-server --requirepass redispassword  & go run main.go"]
+
+
+
+

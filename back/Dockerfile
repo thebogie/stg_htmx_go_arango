@@ -1,5 +1,5 @@
 # builder image
-FROM golang:1.21
+FROM golang:latest
 
 WORKDIR /stg
 

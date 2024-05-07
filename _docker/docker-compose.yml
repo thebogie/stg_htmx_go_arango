@@ -1,27 +1,16 @@
-version: "3.5"
+version: "3.8"
 services:
-
-  redis:
-    image: redis:latest
-    container_name: redis
-    ports:
-      - "50004:6379"
-    environment:
-      - REDIS_PASSWORD=letmein
-    volumes:
-      - /home/smacktalk/stg/redis:/data
-    restart: always
 
   arangodb:
     image: arangodb:latest
     container_name: stg-arangodb
     restart: always
     ports:
-      - 50001:8529
+      - "50001:8529"
     environment:
       ARANGO_ROOT_PASSWORD: letmein
     volumes:
-      - /home/smacktalk/stg/arangodbstorage:/var/lib/arangodb3
+      - ${DB_DATA_DIR}:/var/lib/arangodb3
     networks:
       # Networks to join (Services on the same network can communicate with each other using their name)
       - stg
@@ -31,7 +20,7 @@ services:
     container_name: stg-backend
     # Configuration for building the docker image for the service
     build:
-      context: ./back # Use an image built from the specified dockerfile in the current directory.
+      context: ../back # Use an image built from the specified dockerfile in the current directory.
       dockerfile: Dockerfile
     ports:
       - "50002:50002" # Forward the exposed port 8080 on the container to port 8080 on the host machine
@@ -54,16 +43,16 @@ services:
     container_name: stg-frontend
     # Configuration for building the docker image for the service
     build:
-      context: ./front # Use an image built from the specified dockerfile in the current directory.
+      context: ../front # Use an image built from the specified dockerfile in the current directory.
       dockerfile: Dockerfile
     ports:
-      - "50003:50003" # Forward the exposed port 8080 on the container to port 8080 on the host machine
-    
+      - "50003:50003" # go chi server
+      - "50004:6379" #redis
     environment:
       DEV: "false"
 
-    depends_on:
-      - backend
+    #depends_on:
+    #- backend
     networks:
       # Networks to join (Services on the same network can communicate with each other using their name)
       - stg

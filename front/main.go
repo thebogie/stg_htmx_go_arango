@@ -7,6 +7,8 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/cors"
+	"github.com/joho/godotenv"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -14,6 +16,10 @@ import (
 )
 
 func main() {
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	// Initialize the session store
 	middle.InitSession()
@@ -25,6 +31,7 @@ func main() {
 	//ctx = services.WithGraphQLClient(ctx, graphqlClient)
 	// Add stg-middleware (optional)
 	r.Use(middleware.Logger) // Logs requests to the console
+	r.Use(middleware.Recoverer)
 
 	r.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts

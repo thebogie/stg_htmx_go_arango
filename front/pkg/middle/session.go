@@ -11,6 +11,8 @@ import (
 	"github.com/gorilla/sessions"
 	"math/rand"
 	"net/http"
+	"os"
+	"time"
 )
 
 // Store is the session store
@@ -21,10 +23,25 @@ func InitSession() {
 	gob.Register(&types.Player{})
 
 	var err error
-	Store, err = redistore.NewRediStore(10, "tcp", "localhost:50004", "", []byte("secret-key"))
+
+	for i := 0; i < 10; i++ {
+		Store, err = redistore.NewRediStore(10, "tcp", os.Getenv("STG_REDIS_LOCATION"), "redispassword", []byte(os.Getenv("STG_REDIS_KEY")))
+		if err == nil {
+			// RediStore created successfully, break out of the loop
+			break
+		}
+
+		// Wait for 1 second before trying again
+		time.Sleep(1 * time.Second)
+	}
+
+	// Check if the RediStore was created successfully
 	if err != nil {
 		panic(err)
+	} else {
+		fmt.Println("RediStore created successfully!")
 	}
+
 }
 
 // Middleware is the session middleware
@@ -57,7 +74,7 @@ func SessionMiddleware(next http.Handler) http.Handler {
 
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, "session", session)
-		ctx = services.WithGraphQLClient(ctx, services.InitGraphQL("http://localhost:50002/graphql"))
+		ctx = services.WithGraphQLClient(ctx, services.InitGraphQL(os.Getenv("STG_GRAPHQL_API")))
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
