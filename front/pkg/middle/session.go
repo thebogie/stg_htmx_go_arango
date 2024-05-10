@@ -20,12 +20,12 @@ var Store *redistore.RediStore
 
 // Init initializes the session store
 func InitSession() {
-	gob.Register(&types.Player{})
+	gob.Register(types.Player{})
 
 	var err error
 
 	for i := 0; i < 10; i++ {
-		Store, err = redistore.NewRediStore(10, "tcp", os.Getenv("STG_REDIS_LOCATION"), "redispassword", []byte(os.Getenv("STG_REDIS_KEY")))
+		Store, err = redistore.NewRediStore(10, "tcp", os.Getenv("STG_REDIS_LOCATION"), os.Getenv("STG_REDIS_PASS"), []byte(os.Getenv("STG_REDIS_KEY")))
 		if err == nil {
 			// RediStore created successfully, break out of the loop
 			break
@@ -49,14 +49,14 @@ func InitSession() {
 func SessionMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		session, err := Store.Get(r, "session-id")
+		session, err := Store.Get(r, "stg-session")
 		if err != nil {
 			// Handle the error
 			return
 		}
 
 		// Check if the session is new
-		if session.IsNew || session.Values["currentPlayer"] == nil {
+		if session.IsNew {
 			// Generate a new session ID
 			//session.Values["user_id"] = generateUniqueID()
 			session.Values["currentPlayer"] = types.Player{
@@ -85,18 +85,32 @@ func GetSession(r *http.Request) *sessions.Session {
 }
 
 // GetUserID retrieves the user ID from the request context
-func GetCurrentPlayer(r *http.Request) *types.Player {
-	retVal := &types.Player{}
+func GetCurrentPlayer(r *http.Request) types.Player {
+
 	session := r.Context().Value("session").(*sessions.Session)
-	currentPlayer := session.Values["currentPlayer"]
-
-	_, ok := currentPlayer.(*types.Player)
-	if currentPlayer != nil && !ok {
-		fmt.Errorf("Unexpected value for currentPlayer: %T", currentPlayer)
-
+	player := types.Player{
+		Firstname:   "empty",
+		Email:       "empty",
+		Password:    "",
+		AccessToken: "",
 	}
 
-	retVal = currentPlayer.(*types.Player)
+	player, ok := session.Values["currentPlayer"].(types.Player)
+	if !ok {
+		fmt.Println("No user, reseting to clean currentplayer")
+		return player
+	}
+
+	return player
+}
+
+func CheckAuth(r *http.Request) bool {
+	retVal := true
+	player := GetCurrentPlayer(r)
+
+	if player.AccessToken == "" {
+		retVal = false
+	}
 	return retVal
 }
 

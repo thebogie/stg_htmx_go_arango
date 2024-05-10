@@ -1,0 +1,14 @@
+{{ define "content" }}
+{{ if  .User.Email }}
+<div id="user-info">
+
+
+    <p>Profile: , {{ .User }}</p>
+
+</div>
+{{ end }}
+
+
+{{ end }}
+
+{{ template "layout.html" . }}

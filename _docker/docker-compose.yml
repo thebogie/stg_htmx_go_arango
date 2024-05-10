@@ -47,7 +47,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "50003:50003" # go chi server
-      - "50004:6379" #redis
+      - "6379:6379" #redis
     environment:
       DEV: "false"
 

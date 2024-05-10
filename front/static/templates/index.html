@@ -1,9 +1,11 @@
 {{ define "content" }}
+
+
+EMAIL: {{.User.Email}}
+{{.User.Firstname}}
+
     {{ if  .User.Email }}
 <div id="user-info">
-
-
-    <p>Hello, {{ .User }}</p>
 
 </div>
 {{ end }}

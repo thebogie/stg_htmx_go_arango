@@ -3,14 +3,14 @@ package auth
 import (
 	"golang.org/x/crypto/bcrypt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-// secret key being used to sign tokens
 var (
-	SecretKey = []byte("ThisIsASecretKeyThatOnlyIKnowAndWontTellAnybody")
+	SecretKey = []byte(os.Getenv("JWT_ACCESS_KEY"))
 )
 
 type JwtHeader struct {

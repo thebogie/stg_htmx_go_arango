@@ -94,15 +94,11 @@ func PlayerAuth(w http.ResponseWriter, r *http.Request) {
 	}
 	err = session.Save(r, w)
 	if err != nil {
-		panic(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
-	// Parse templates
-	// Redirect to target URL
-	//w.Header().Set("Content-Type", "text/html")
-	//http.Redirect(w, r, "/", http.StatusFound)
-	w.Header().Set("HX-Redirect", "/")
+	w.Header().Set("HX-Redirect", "/profile")
 	w.WriteHeader(http.StatusOK)
 
 }
@@ -113,16 +109,28 @@ func PlayerLogin(w http.ResponseWriter, r *http.Request) {
 		"static/templates/layout.html",
 		"static/templates/index.html",
 		"static/templates/login/loginForm.html"))
-
+	session := r.Context().Value("session").(*sessions.Session)
 	currentPlayer := middle.GetCurrentPlayer(r)
-	fmt.Println("session" + currentPlayer.Firstname)
+
+	//we are logging in, reset all the info to clear any bogus tokens
+	session.Values["currentPlayer"] = types.Player{
+		Firstname:   currentPlayer.Firstname,
+		Email:       currentPlayer.Email,
+		Password:    "",
+		AccessToken: "",
+	}
+	err := session.Save(r, w)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	data := struct {
 		Title string
 	}{
 		Title: "Login",
 	}
-	err := templates.ExecuteTemplate(w, "loginForm.html", data)
+	err = templates.ExecuteTemplate(w, "loginForm.html", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

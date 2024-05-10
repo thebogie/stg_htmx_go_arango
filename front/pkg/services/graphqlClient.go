@@ -37,12 +37,7 @@ func InitGraphQL(endpoint string) *GraphQLClientService {
 
 func (cs *GraphQLClientService) Query(ctx context.Context, query string, variables map[string]interface{}, result *[]byte) error {
 	session := ctx.Value("session").(*sessions.Session)
-	currentPlayer := session.Values["currentPlayer"]
-	player, ok := currentPlayer.(*types.Player)
-	if !ok {
-		fmt.Println("Error: Unexpected value for currentPlayer")
-		return nil
-	}
+	player := session.Values["currentPlayer"].(types.Player)
 	authKey := player.AccessToken
 
 	req := Request{

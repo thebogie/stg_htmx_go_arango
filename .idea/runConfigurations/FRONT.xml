@@ -2,7 +2,7 @@
   <configuration default="false" name="FRONT" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="stg_htmx_go_arango" />
     <working_directory value="$PROJECT_DIR$/front" />
-    <kind value="FILE" />
+    <kind value="PACKAGE" />
     <package value="front" />
     <directory value="$PROJECT_DIR$/front" />
     <filePath value="$PROJECT_DIR$/front/main.go" />

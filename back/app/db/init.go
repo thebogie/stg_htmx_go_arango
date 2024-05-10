@@ -14,7 +14,7 @@ func InitDB() godriver.Database {
 
 	databaseURI := os.Getenv("DATABASE_URI")
 	if databaseURI == "" {
-		databaseURI = "http://localhost:50001"
+		databaseURI = os.Getenv("DATABASE_URI")
 	}
 
 	var conn godriver.Connection

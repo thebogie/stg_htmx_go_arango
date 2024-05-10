@@ -6,14 +6,14 @@
                 <div class="card-content">
                     <span class="card-title center-align">Login</span>
                     <form hx-post="/player/auth" hx-target="#login-response"  >
-                        <div class="row">
+                        <div class="col">
                             <div class="input-field col s12">
-                                <input id="email" type="email" class="validate" name="email" required>
-                                <label for="email">Email</label>
+                                <input id="email" type="email" class="validate form-control" name="email" required>
+                                <label for="email" placeholder="">Email</label>
                             </div>
                             <div class="input-field col s12">
-                                <input id="password" type="password" class="validate" name="password" required>
-                                <label for="password">Password</label>
+                                <input id="password" type="password" class="validate form-control" name="password" required>
+                                <label for="password" placeholder="">Password</label>
                             </div>
                             <div class="col s12">
                                 <button class="btn waves-effect waves-light" type="submit">Login</button>
