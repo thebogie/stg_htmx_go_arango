@@ -37,7 +37,7 @@ func contestPage(w http.ResponseWriter, r *http.Request) {
 	templates := template.Must(template.ParseFiles(
 		"static/templates/layout.html",
 		"static/templates/nav.html",
-		"static/templates/profile/profile.html"))
+		"static/templates/contest/contest.html"))
 
 	test := r.Context().Value("session").(*sessions.Session)
 	fmt.Println("TEST" + test.ID)
@@ -49,7 +49,7 @@ func contestPage(w http.ResponseWriter, r *http.Request) {
 			Firstname: currentPlayer.Firstname,
 		},
 	}
-	err := templates.ExecuteTemplate(w, "profile.html", data)
+	err := templates.ExecuteTemplate(w, "contest.html", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

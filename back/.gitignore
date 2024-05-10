@@ -17,11 +17,6 @@
 # Go workspace file
 go.work
 
-
-# Generated Files
-**/.generated.*
-graph/**/*.generated.*  # More specific for gqlgen
-
 # Compiled Binaries
 bin/*
 *_test
@@ -56,4 +51,6 @@ coverage/
 
 # gqlgen Cache
 .gqlgen.cache
-resolver/*.resolvers.go  # For older gqlgen versions
+# gqlgen generated files
+graph/generated
+graph/model

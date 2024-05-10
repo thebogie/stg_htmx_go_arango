@@ -17,4 +17,5 @@ input InputGame {
 
 extend type Query {
     Games: [Game!]!
+    FindGame(name: String!): [Game!]!
 }

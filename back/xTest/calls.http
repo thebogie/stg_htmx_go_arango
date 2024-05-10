@@ -1,5 +1,26 @@
 
+####
+GRAPHQL http://localhost:50002/graphql
+#Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwMDI4MzQyNn0.yGJ12K17ZMLck_TmsMRlhXyTqgZRkBTkmUGKfi42JQA
 
+mutation LoginUser($input: Login!) {
+    LoginUser(input: $input) {
+        token
+        userdata {
+            _key
+            _id
+            _rev
+            firstname
+            email
+        }
+    }
+}
+{
+  "input": {
+    "username": "mitch@gmail.com",
+    "password": "letmein"
+  }
+}
 
 ####
 GRAPHQL https://smacktalkgaming.com/graphql
@@ -28,41 +49,31 @@ query IntrospectionQuery {
     }
   }
 }
-####
-GRAPHQL http://localhost:50002/graphql
-#Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwMDI4MzQyNn0.yGJ12K17ZMLck_TmsMRlhXyTqgZRkBTkmUGKfi42JQA
 
-mutation LoginUser($input: Login!) {
-    LoginUser(input: $input) {
-        token
-        userdata {
-            _key
-            _id
-            _rev
-            firstname
-            email
-        }
-    }
-}
-{
-  "input": {
-    "username": "mitch@gmail.com",
-    "password": "letmein"
-  }
-}
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNDA1NDMxNX0.O7TLlhoPt5SlvXpJdrYKjUASx_dBek4Ht9xqTYJ1ATI
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNTQ1OTQ0M30.l2RebVUB6ASZF2ZnPDSB5ZsMw1nFypYQQ067sTwd2xk
 
 query  Game {
-Games { name }
+games { name }
 }
 {}
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwNjIyMTY5MH0.i_kw5C1HmVm22nc9h3r37AXNNj7n6nG0avDUjMKxnGU
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNTQ2MDM3N30.8QwEm3H25IpvTOLJylfQK4FmXyOD7JYWCBVhvwdqhGM
+
+query  FindGame($name : String!) {
+    FindGame(name: $name) {
+        name
+    }
+}
+{"name": "king"}
+
+####
+GRAPHQL http://localhost:50002/graphql
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNTQ1OTQ0M30.l2RebVUB6ASZF2ZnPDSB5ZsMw1nFypYQQ067sTwd2xk
 
 query  GetContestsPlayerTotalResults($player: String! ) {
 GetContestsPlayerTotalResults(player : $player)

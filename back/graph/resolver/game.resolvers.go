@@ -13,3 +13,8 @@ import (
 func (r *queryResolver) Games(ctx context.Context) ([]*model.Game, error) {
 	return r.Game.List(ctx)
 }
+
+// FindGame is the resolver for the FindGame field.
+func (r *queryResolver) FindGame(ctx context.Context, name string) ([]*model.Game, error) {
+	return r.Game.FindGame(ctx, name)
+}

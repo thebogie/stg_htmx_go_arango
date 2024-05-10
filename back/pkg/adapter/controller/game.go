@@ -8,6 +8,7 @@ import (
 
 type GameController interface {
 	List(ctx context.Context) ([]*model.Game, error)
+	FindGame(ctx context.Context, name string) ([]*model.Game, error)
 }
 
 type gameController struct {
@@ -19,6 +20,11 @@ func NewGameController(gu usecase.GameUsecase) GameController {
 	return &gameController{
 		gameUsecase: gu,
 	}
+}
+
+func (gc gameController) FindGame(ctx context.Context, name string) ([]*model.Game, error) {
+
+	return gc.gameUsecase.FindGame(ctx, name)
 }
 
 func (gc gameController) List(ctx context.Context) ([]*model.Game, error) {

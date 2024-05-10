@@ -1,0 +1,12 @@
+mutation LoginUser($input: Login!) {
+    LoginUser(input: $input) {
+        token
+        userdata {
+            _key
+            _id
+            _rev
+            firstname
+            email
+        }
+    }
+}

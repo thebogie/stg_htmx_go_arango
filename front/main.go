@@ -57,6 +57,7 @@ func main() {
 	r.Mount("/profile", routes.ProfileRoutes())
 	r.Mount("/player", routes.PlayerRoutes())
 	r.Mount("/contest", routes.ContestRoutes())
+	r.Mount("/game", routes.GameRoutes())
 
 	// Mount the API handler (assuming a handler function in pkg/api)
 	//r.Mount("/player", api.NewAPIRouter()) // Mount under the "/api" prefix
