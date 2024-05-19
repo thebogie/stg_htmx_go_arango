@@ -2,9 +2,9 @@
 # Smacktalk Gaming
 
 full stack web application 
-- frontend = htmx + go templates + golang
+- frontend = htmx + go templates + golang + redis for state
 - backend = graphql + golang
-- database = arango
+- database = arango 
 
 
 ### docker setup for all
@@ -30,12 +30,14 @@ docker-compose -f .\docker-compose.dev.yml up -d arangodb
   - add contest page
     - figure out local zone in contest server side and update times. then send through to contest?
   - profile front page. what to hold in it? how to click through to show list of games and venue
+  - add Testcontainers
 
 
 - Backend
   - fetch array of games. add games if new
   - add Played_With
   - add new outcomes (no previous)
+  - add Testcontainers
 
 
 

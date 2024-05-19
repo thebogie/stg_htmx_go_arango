@@ -1,11 +1,12 @@
-package auth
+package test
 
 import (
+	"back/auth"
 	"testing"
 )
 
 func TestCheckJWTCreation(t *testing.T) {
-	var jwtheader JwtHeader
+	var jwtheader auth.JwtHeader
 
 	t.Setenv("JWT_ACCESS_KEY", "2c46f7651a176169c8d2f7aee60cce3da874501d")
 	emailToTest := "john@test.com"

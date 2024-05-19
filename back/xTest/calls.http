@@ -62,7 +62,7 @@ games { name }
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNTQ2MDM3N30.8QwEm3H25IpvTOLJylfQK4FmXyOD7JYWCBVhvwdqhGM
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNjE0ODkyNn0.JIMK8SuwSFXe0KugoGAvYmoJt-0NDUqggz-Hr3EyuEg
 
 query  FindGame($name : String!) {
     FindGame(name: $name) {

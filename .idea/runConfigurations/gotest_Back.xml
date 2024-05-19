@@ -1,13 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="gotest Back" type="GoTestRunConfiguration" factoryName="Go Test">
     <module name="stg_htmx_go_arango" />
-    <working_directory value="$PROJECT_DIR$/back" />
+    <working_directory value="$PROJECT_DIR$/back/test" />
     <kind value="DIRECTORY" />
     <package value="back" />
-    <directory value="$PROJECT_DIR$/back" />
+    <directory value="$PROJECT_DIR$/back/test" />
     <filePath value="$PROJECT_DIR$" />
     <framework value="gotest" />
-    <pattern value="_test.go" />
     <method v="2" />
   </configuration>
 </component>

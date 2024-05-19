@@ -1,0 +1,5 @@
+query FindGame($name: String!) {
+    FindGame(name: $name) {
+        name
+    }
+}

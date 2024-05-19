@@ -8,14 +8,14 @@
 </div>
 
 <div class="container">
-    <h1>HTMX and Materialize Example</h1>
+    <h1>Game</h1>
     <div class="row">
         <div class="col s12">
             <div class="input-field">
-                <input type="text" id="search-input" hx-post="/search" hx-trigger="keyup changed delay:500ms" hx-target="#search-results" hx-indicator=".indicator">
+                <input name="game-search" type="text" id="search-input" hx-post="/game/search" hx-trigger="keyup changed delay:500ms" hx-target="#search-results" hx-indicator=".indicator">
                 <label for="search-input">Search</label>
             </div>
-            <div id="search-results"></div>
+            <div id="search-results">replace here</div>
             <div class="indicator" style="display: none;">
                 <div class="preloader-wrapper small active">
                     <div class="spinner-layer spinner-green-only">
