@@ -2,10 +2,12 @@ package routes
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"front/pkg/services"
 	"front/pkg/types"
 	"github.com/go-chi/chi/v5"
+	"github.com/gorilla/sessions"
 	"html/template"
 	"log"
 	"net/http"
@@ -25,6 +27,7 @@ func GameRoutes() chi.Router {
 
 func search(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	session := r.Context().Value("session").(*sessions.Session)
 	//session := r.Context().Value("session").(*sessions.Session)
 	templates := template.Must(template.ParseFiles(
 		"static/templates/game/gameReturnSearch.html"))
@@ -46,14 +49,27 @@ func search(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	variables := map[string]interface{}{
-		"name": r.FormValue("game-search"),
+		"name": r.FormValue("game_search"),
 	}
 	//req.Var("input", variables["input"])
 	var result []byte
 	result = []byte{}
 	err = gql.Query(ctx, string(query), variables, &result)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		var stgerror *types.STGError
+		if errors.As(err, &stgerror) && stgerror.Msg == "relogin" {
+			session.Values["currentPlayer"] = types.Player{
+				Firstname:   "",
+				Email:       "",
+				Password:    "",
+				AccessToken: "",
+			}
+			err = session.Save(r, w)
+			w.Header().Set("HX-Redirect", "/")
+			w.WriteHeader(http.StatusOK)
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 

@@ -19,7 +19,7 @@
             </li>
         </ul>
         <ul class="navbar-nav">
-            {{ if eq .User.Email "empty"}}
+            {{ if eq .User.Email ""}}
             <button class="btn btn-primary me-1" hx-get="/player/login" hx-target="#login-modal" type="button">Login
             </button>
             {{end}}

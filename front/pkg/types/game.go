@@ -3,6 +3,7 @@ package types
 import "sort"
 
 type Game struct {
+	Id   string `json:"_id"`
 	Name string `json:"name"`
 }
 

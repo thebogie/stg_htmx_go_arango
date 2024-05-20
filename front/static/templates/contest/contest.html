@@ -1,41 +1,211 @@
 {{ define "content" }}
+<script src="static/js/newcontest.js"></script>
+<script>
+    const newContest = {
+        start: "",
+        startoffset: "",
+        stop: "",
+        stopoffset: "",
+        outcomes: [],
+        games: [],
+        venue: {
+            _id: "",
+            address: "",
+            lat: "",
+            lng: ""
+        }
+    };
+
+    deleteContestFromLocalStorage();
+    saveContestToLocalStorage(newContest);
+
+    let startDateSync, startTimeSync = false;
+    let endDateSync, endTimeSync = false;
+
+</script>
+
 {{ if  .User.Email }}
 <div id="user-info">
-
 
     <p>Contest: , {{ .User }}</p>
 
 </div>
+{{ end }}
 
-<div class="container">
-    <h1>Game</h1>
-    <div class="row">
-        <div class="col s12">
-            <div class="input-field">
-                <input name="game-search" type="text" id="search-input" hx-post="/game/search" hx-trigger="keyup changed delay:500ms" hx-target="#search-results" hx-indicator=".indicator">
-                <label for="search-input">Search</label>
+
+<div class="container mt-5">
+    <div class="form-row align-items-center">
+        <div class="col-auto">
+            <div class="row">
+                <div class="col">
+                    <label for="start_date" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">Start
+                        Date</label>
+
+                    <input id="start_date" type="text" class="datepicker">
+                </div>
+                <div class="col">
+                    <label for="start_time" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">Start
+                        Time</label>
+                    <input id="start_time" type="text" class="timepicker">
+                </div>
+
             </div>
-            <div id="search-results">replace here</div>
-            <div class="indicator" style="display: none;">
-                <div class="preloader-wrapper small active">
-                    <div class="spinner-layer spinner-green-only">
-                        <div class="circle-clipper left">
-                            <div class="circle"></div>
+            <div class="row">
+                <div class="col">
+                    <label for="end_date" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">End
+                        Date</label>
+
+                    <input id="end_date" type="text" class="datepicker">
+                </div>
+                <div class="col">
+                    <label for="end_time" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">End
+                        Time</label>
+                    <input id="end_time" type="text" class="timepicker">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <hr>
+
+    <hr>
+    <div class="container  mt-5">
+        <div class="form-row align-items-center col-auto">
+            <div class="row">
+                <div class="col input-field">
+                    <label for="game_search" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">Find
+                        Game</label>
+                    <input name="game_search" type="text" id="game_search" hx-post="/game/search"
+                           hx-trigger="keyup changed delay:500ms" hx-target="#game_list" hx-indicator=".indicator">
+
+                </div>
+            </div>
+            <div class="row">
+                <div id="game_list">
+fish
+                </div>
+
+                <div class="indicator" style="display: none;">
+                    <div class="preloader-wrapper small active">
+                        <div class="spinner-layer spinner-green-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
                         </div>
-                        <div class="gap-patch">
-                            <div class="circle"></div>
-                        </div>
-                        <div class="circle-clipper right">
-                            <div class="circle"></div>
-                        </div>
+
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
-{{ end }}
 
+
+</div>
+
+<script>
+
+    document.addEventListener('htmx:afterOnLoad', function(event) {
+        var elems = document.querySelectorAll('select');
+        M.FormSelect.init(elems);
+    });
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.datepicker');
+        var instances = M.Datepicker.init(elems, {
+            autoClose: true,
+            format: 'yyyy-mm-dd',
+            //defaultDate: Date.now(),
+            //setDefaultDate: true,
+            minDate: null,
+            maxDate: null
+        });
+
+        // Get the instances for each datepicker
+        var start_date = M.Datepicker.getInstance(elems[0]);
+        var end_date = M.Datepicker.getInstance(elems[1]);
+
+
+        // Initialize the timepicker
+        var timeElems = document.querySelectorAll('.timepicker');
+        var timeInstances = M.Timepicker.init(timeElems, {
+            twelveHour: false,
+            autoClose: true
+        });
+        var start_time = M.Timepicker.getInstance(elems[0]);
+        var end_time = M.Timepicker.getInstance(elems[1]);
+    });
+    document.querySelector('#start_date').addEventListener('change', function () {
+        startDateSync = true;
+        var selectedDate = this.value;
+
+        if (startTimeSync && startDateSync) {
+            helper_updateStart(selectedDate + ' ' + document.querySelector('#start_time').value)
+        }
+
+    });
+    document.querySelector('#start_time').addEventListener('change', function () {
+        var selectedTime = this.value;
+        startTimeSync = true;
+
+
+        if (startDateSync && startTimeSync) {
+            helper_updateStart(document.querySelector('#start_date').value + ' ' + selectedTime)
+        }
+    });
+    document.querySelector('#end_date').addEventListener('change', function () {
+        endDateSync = true;
+        var selectedDate = this.value;
+
+        if (endTimeSync && endDateSync) {
+            helper_updateEnd(selectedDate + ' ' + document.querySelector('#end_time').value)
+        }
+
+    });
+    document.querySelector('#end_time').addEventListener('change', function () {
+        var selectedTime = this.value;
+        endTimeSync = true;
+
+        console.log('start_date selected date:', selectedTime);
+        if (endDateSync && endTimeSync) {
+            helper_updateEnd(document.querySelector('#end_date').value + ' ' + selectedTime)
+        }
+    });
+
+    function helper_updateStart(dateTimeString) {
+        const contestData = getContestFromLocalStorage();
+
+        var dateTime = new Date(dateTimeString);
+        //figure out offset
+        contestData.startoffset = getISOOffsetString(dateTime);
+        contestData.start = dateTime.toISOString();
+
+        updateContestInLocalStorage(contestData);
+
+    }
+
+    function helper_updateEnd(dateTimeString) {
+        const contestData = getContestFromLocalStorage();
+
+        var dateTime = new Date(dateTimeString);
+        //figure out offset
+        contestData.stopoffset = getISOOffsetString(dateTime);
+        contestData.stop = dateTime.toISOString();
+
+        updateContestInLocalStorage(contestData);
+
+    }
+</script>
 
 {{ end }}
 

@@ -1,5 +1,12 @@
-<ul>
+
+
+
+
+<label for="gamesToSelect">Games</label>
+<select id="gamesToSelect">
     {{range .FindGame}}
-    <li>Game Name: {{.Name}}</li>
+    <option value={{.Id}}>{{.Name}}</option>
     {{end}}
-</ul>
+</select>
+
+

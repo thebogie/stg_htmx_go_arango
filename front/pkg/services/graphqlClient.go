@@ -69,6 +69,15 @@ func (cs *GraphQLClientService) Query(ctx context.Context, query string, variabl
 		return fmt.Errorf("GraphQL errors: %v", err)
 	}
 
+	if resp.StatusCode == 400 && string(respBody) == "Wrong user or not valid\n" {
+		//id wrong user or id.. might need to login again:
+
+		return &types.STGError{
+			Msg:  "relogin",
+			Code: 400,
+		}
+	}
+
 	var graphqlResp Response
 	if err := json.Unmarshal(respBody, &graphqlResp); err != nil {
 		return fmt.Errorf("GraphQL errors: %v", err)

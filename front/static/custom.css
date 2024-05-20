@@ -1,3 +1,14 @@
 main {
     padding-top:65px; /* Adjust this value based on your navbar height */
 }
+
+
+
+#buttons
+.btn-extra-small {
+    font-size: 0.6rem; /* Adjust the font size as needed */
+    padding: 0.2rem 0.4rem; /* Adjust the padding as needed */
+}
+.btn.waves-effect.waves-light:active {
+    background-color: purple;
+}
