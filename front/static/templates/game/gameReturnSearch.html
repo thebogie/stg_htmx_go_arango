@@ -1,12 +1,7 @@
-
-
-
-
-<label for="gamesToSelect">Games</label>
-<select id="gamesToSelect">
-    {{range .List}}
-    <option value={{.Id}}>{{.Name}}</option>
+{{range .List}}
+<tr>
+    <td>{{.Name}}</td>
+    <td>{{.YearPublished}}</td>
+    <td>{{.BGGId}}</td>
     {{end}}
-</select>
-
-
+</tr>

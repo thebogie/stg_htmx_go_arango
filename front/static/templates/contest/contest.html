@@ -34,30 +34,30 @@
 
 
 <div class="container mt-5">
-    <div class="form-row align-items-center">
-        <div class="col-auto">
-            <div class="row">
-                <div class="col">
+    <div class="">
+        <div class="">
+            <div class="row s5">
+                <div class="col input-field">
                     <label for="start_date" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">Start
                         Date</label>
 
                     <input id="start_date" type="text" class="datepicker">
                 </div>
-                <div class="col">
+                <div class="col input-field">
                     <label for="start_time" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">Start
                         Time</label>
                     <input id="start_time" type="text" class="timepicker">
                 </div>
 
             </div>
-            <div class="row">
-                <div class="col">
+            <div class="row s5">
+                <div class="col input-field">
                     <label for="end_date" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">End
                         Date</label>
 
                     <input id="end_date" type="text" class="datepicker">
                 </div>
-                <div class="col">
+                <div class="col input-field">
                     <label for="end_time" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">End
                         Time</label>
                     <input id="end_time" type="text" class="timepicker">
@@ -67,53 +67,63 @@
 
         </div>
     </div>
-    <hr>
+</div>
 
+<div class="container mt-5">
 
-    <div class="container  mt-5">
-        <div class="form-row align-items-center col-auto">
-            <div class="row">
-                <div class="col input-field">
-                    <label for="game_search" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">Find
-                        Game</label>
-                    <input name="game_search" type="text" id="game_search" hx-post="/game/search"
-                           hx-trigger="keyup changed delay:500ms" hx-target="#game_list" hx-indicator=".indicator">
+    <div class="row">
+        <div class="col s3">
+            <div class="input-field">
+                <label for="game_search" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">Find
+                    Game</label>
+                <input name="game_search" type="text" id="game_search" hx-post="/game/search"
+                       hx-trigger="keyup changed delay:500ms" hx-target="#game_select_list_data">
 
-                </div>
             </div>
-            <div class="row">
-                <div id="game_list">
-fish
-                </div>
-
-                <div class="indicator" style="display: none;">
-                    <div class="preloader-wrapper small active">
-                        <div class="spinner-layer spinner-green-only">
-                            <div class="circle-clipper left">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="gap-patch">
-                                <div class="circle"></div>
-                            </div>
-                            <div class="circle-clipper right">
-                                <div class="circle"></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
+        <div class="col s7">
+
+            <div class="table-wrapper">
+                <div id="selected-data">
+                    (selected games)
+                </div>
+                <button class=" waves-effect waves-light btn-extra-small" id="clear_game_storage">reset
+                </button>
+                <button class=" waves-effect waves-light btn-extra-small" id="lock_game_storage">lock
+                </button>
+
+            </div>
+        </div>
+
     </div>
-</div>
+
+    <div class="row">
+        <div class="col s10">
+            <div class="scrollable-table">
+                <table id="game_select_list" class="highlight striped responsive-table" style="display:none;">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Year</th>
+                        <th>BGGID</th>
+                    </tr>
+                    </thead>
+                    <tbody id="game_select_list_data">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
 
 
 </div>
+
 
 <script>
-
-    document.addEventListener('htmx:afterOnLoad', function(event) {
+    document.addEventListener('htmx:afterOnLoad', function (event) {
         var elems = document.querySelectorAll('select');
         M.FormSelect.init(elems);
     });
@@ -205,6 +215,54 @@ fish
         updateContestInLocalStorage(contestData);
 
     }
+
+    document.querySelector('#game_select_list').addEventListener('click', function (e) {
+        const gameObj = {};
+        if (e.target && e.target.nodeName === "TD") {
+            const selectedDataContainer = document.getElementById('selected-data');
+            const tr = e.target.closest('tr');
+
+
+            // Get all table data cells (<td>) within the selected row
+            const cells = tr.querySelectorAll('td');
+            gameObj.name = cells[0].textContent;
+            gameObj.year_published = parseInt(cells[1].textContent);
+            gameObj.bgg_id = parseInt(cells[2].textContent);
+
+
+            addGameToLocalStorage(gameObj)
+
+            let listContent = "";
+            for (const object of getContestFromLocalStorage().games) {
+                // Access properties of each object
+                const year = object.year_published;
+                const name = object.name;
+                const bgg_id = object.bgg_id;
+
+                // Build the list item HTML (you can customize this)
+                listContent += `-${name} (${year})<br>`;
+            }
+
+            selectedDataContainer.innerHTML = listContent;
+        }
+
+    })
+    ;
+    document.getElementById("clear_game_storage").addEventListener("click", function () {
+
+        deleteGamesFromLocalStorage();
+        document.getElementById('selected-data').innerHTML = getContestFromLocalStorage().games;
+    });
+    document.getElementById("lock_game_storage").addEventListener("click", function () {
+        game_select_table = document.querySelector('#game_select_list')
+        game_select_table.style.display = "none";
+    });
+    document.getElementById("game_search").addEventListener("click", function () {
+        game_select_table = document.querySelector('#game_select_list')
+        game_select_table.style.display = "inline";
+    });
+
+
 </script>
 
 {{ end }}

@@ -50,6 +50,15 @@ function addGameToLocalStorage(newGame) {
     saveContestToLocalStorage(contestData);
 }
 
+/**
+ * deltes all game to the contest data in localStorage
+ */
+function deleteGamesFromLocalStorage() {
+    const contestData = getContestFromLocalStorage();
+    contestData.games = [];
+    saveContestToLocalStorage(contestData);
+}
+
 function getISOOffsetString(date) {
 
     const offsetMinutes = date.getTimezoneOffset();
