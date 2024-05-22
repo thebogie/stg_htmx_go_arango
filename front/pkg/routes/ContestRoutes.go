@@ -27,7 +27,7 @@ func contestPage(w http.ResponseWriter, r *http.Request) {
 	currentPlayer := middle.GetCurrentPlayer(r)
 
 	if !middle.CheckAuth(r) {
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/player/login", http.StatusFound)
 		//w.Header().Set("HX-Redirect", "/")
 		//w.WriteHeader(http.StatusOK)
 		return

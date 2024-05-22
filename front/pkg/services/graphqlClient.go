@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"front/pkg/types"
 	"github.com/gorilla/sessions"
@@ -69,12 +70,11 @@ func (cs *GraphQLClientService) Query(ctx context.Context, query string, variabl
 		return fmt.Errorf("GraphQL errors: %v", err)
 	}
 
-	if resp.StatusCode == 400 && string(respBody) == "Wrong user or not valid\n" {
+	if resp.StatusCode == 401 {
 		//id wrong user or id.. might need to login again:
-
 		return &types.STGError{
 			Msg:  "relogin",
-			Code: 400,
+			Code: 401,
 		}
 	}
 
@@ -105,6 +105,31 @@ func (cs *GraphQLClientService) Query(ctx context.Context, query string, variabl
 	//}
 
 	return nil
+}
+
+func (cs *GraphQLClientService) CheckLoginRefresh(w http.ResponseWriter, r *http.Request, err error) {
+
+	session := r.Context().Value("session").(*sessions.Session)
+	var stgError *types.STGError
+	if errors.As(err, &stgError) {
+		switch stgError.Code {
+		case 401:
+			session.Values["currentPlayer"] = types.Player{
+				Firstname:   "",
+				Email:       "",
+				Password:    "",
+				AccessToken: "",
+			}
+			err = session.Save(r, w)
+			w.Header().Set("HX-Redirect", "/")
+			w.WriteHeader(http.StatusOK)
+
+			return
+		}
+	} else {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+	return
 }
 
 type graphqlClientKey struct{}

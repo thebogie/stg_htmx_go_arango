@@ -44,9 +44,7 @@ func Middleware() func(http.Handler) http.Handler {
 					next.ServeHTTP(w, r)
 					return
 				} else {
-					//PASSTHROUGH
-					//next.ServeHTTP(w, r)
-					//return
+					log.Printf("Blank autohorization")
 					http.Error(w, "Login or Authorization header is required", http.StatusUnauthorized)
 					return
 				}
@@ -60,7 +58,7 @@ func Middleware() func(http.Handler) http.Handler {
 			//TODO: check for expired too
 			if email == "INVALID" {
 				log.Printf("Incorrect JWT token.")
-				http.Error(w, "Wrong user or not valid", http.StatusBadRequest)
+				http.Error(w, "Login or Authorization header is required", http.StatusUnauthorized)
 				return
 			}
 			ctx = context.WithValue(r.Context(), "authuser", email)

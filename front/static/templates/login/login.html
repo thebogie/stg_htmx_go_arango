@@ -1,0 +1,55 @@
+{{ define "content" }}
+
+
+{{ if  .User.Email }}
+<div id="user-info">
+
+    <p>Login: , {{ .User }}</p>
+
+</div>
+{{ end }}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col s12 m6 offset-m3">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title center-align"><i class="fas fa-user-circle fa-3x"></i></span>
+                    <h4 class="center-align">Login</h4>
+                    <div class="row">
+                        <form class="col s12" hx-post="/player/auth" hx-target="#login-response">
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="fas fa-envelope prefix"></i>
+                                    <input name="email" id="email" type="email" class="validate">
+                                    <label for="email">Email</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <i class="fas fa-lock prefix"></i>
+                                    <input name="password" id="password" type="password" class="validate">
+                                    <label for="password">Password</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12">
+                                    <button class="btn waves-effect waves-light right" type="submit" name="action">Login
+                                        <i class="fas fa-sign-in-alt right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="login-response"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{ end }}
+
+{{ template "layout.html" . }}

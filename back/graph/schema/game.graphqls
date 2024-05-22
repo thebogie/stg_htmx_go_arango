@@ -3,6 +3,8 @@ type Game {
     _id:String!
     _rev:String!
     name:String!
+    year_published:Int!
+    bgg_id: Int!
 
 }
 

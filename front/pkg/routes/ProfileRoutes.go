@@ -1,11 +1,9 @@
 package routes
 
 import (
-	"fmt"
 	"front/pkg/middle"
 	"front/pkg/types"
 	"github.com/go-chi/chi/v5"
-	"github.com/gorilla/sessions"
 	"html/template"
 	"net/http"
 )
@@ -27,7 +25,7 @@ func profilePage(w http.ResponseWriter, r *http.Request) {
 	currentPlayer := middle.GetCurrentPlayer(r)
 
 	if !middle.CheckAuth(r) {
-		http.Redirect(w, r, "/", http.StatusFound)
+		http.Redirect(w, r, "/player/login", http.StatusFound)
 		//w.Header().Set("HX-Redirect", "/")
 		//w.WriteHeader(http.StatusOK)
 		return
@@ -38,9 +36,6 @@ func profilePage(w http.ResponseWriter, r *http.Request) {
 		"static/templates/layout.html",
 		"static/templates/nav.html",
 		"static/templates/profile/profile.html"))
-
-	test := r.Context().Value("session").(*sessions.Session)
-	fmt.Println("TEST" + test.ID)
 
 	data := types.HeaderInfo{
 		Title: "Smacktalk Gaming",

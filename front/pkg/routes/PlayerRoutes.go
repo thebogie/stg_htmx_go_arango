@@ -108,7 +108,8 @@ func PlayerLogin(w http.ResponseWriter, r *http.Request) {
 	templates := template.Must(template.ParseFiles(
 		"static/templates/layout.html",
 		"static/templates/index.html",
-		"static/templates/login/loginForm.html"))
+		"static/templates/nav.html",
+		"static/templates/login/login.html"))
 	session := r.Context().Value("session").(*sessions.Session)
 	currentPlayer := middle.GetCurrentPlayer(r)
 
@@ -125,12 +126,14 @@ func PlayerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := struct {
-		Title string
-	}{
-		Title: "Login",
+	data := types.HeaderInfo{
+		Title: "Sign in",
+		User: types.HeaderUser{
+			Email:     currentPlayer.Email,
+			Firstname: currentPlayer.Firstname,
+		},
 	}
-	err = templates.ExecuteTemplate(w, "loginForm.html", data)
+	err = templates.ExecuteTemplate(w, "login.html", data)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

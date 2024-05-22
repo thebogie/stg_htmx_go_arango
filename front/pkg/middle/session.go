@@ -60,8 +60,8 @@ func SessionMiddleware(next http.Handler) http.Handler {
 			// Generate a new session ID
 			//session.Values["user_id"] = generateUniqueID()
 			session.Values["currentPlayer"] = types.Player{
-				Firstname:   "empty",
-				Email:       "empty",
+				Firstname:   "",
+				Email:       "",
 				Password:    "",
 				AccessToken: "",
 			}
@@ -89,8 +89,8 @@ func GetCurrentPlayer(r *http.Request) types.Player {
 
 	session := r.Context().Value("session").(*sessions.Session)
 	player := types.Player{
-		Firstname:   "empty",
-		Email:       "empty",
+		Firstname:   "",
+		Email:       "",
 		Password:    "",
 		AccessToken: "",
 	}
