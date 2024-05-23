@@ -4,4 +4,5 @@ type Controller struct {
 	User    UserController
 	Contest ContestController
 	Game    GameController
+	Venue   VenueController
 }

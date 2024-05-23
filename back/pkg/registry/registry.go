@@ -28,5 +28,6 @@ func (r *registry) NewController() controller.Controller {
 		User:    r.NewUserController(),
 		Game:    r.NewGameController(),
 		Contest: r.NewContestController(),
+		Venue:   r.NewVenueController(),
 	}
 }

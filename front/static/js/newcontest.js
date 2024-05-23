@@ -59,6 +59,25 @@ function deleteGamesFromLocalStorage() {
     saveContestToLocalStorage(contestData);
 }
 
+/**
+ * Adds a new game to the contest data in localStorage
+ * @param {Object} newVenue - The new game to be added
+ */
+function addVenueToLocalStorage(newVenue) {
+    const contestData = getContestFromLocalStorage();
+    contestData.venue = newVenue;
+    saveContestToLocalStorage(contestData);
+}
+
+/**
+ * deltes all game to the contest data in localStorage
+ */
+function deleteVenueFromLocalStorage() {
+    const contestData = getContestFromLocalStorage();
+    contestData.venue = {};
+    saveContestToLocalStorage(contestData);
+}
+
 function getISOOffsetString(date) {
 
     const offsetMinutes = date.getTimezoneOffset();

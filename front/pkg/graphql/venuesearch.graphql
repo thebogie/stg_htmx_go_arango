@@ -1,0 +1,7 @@
+query FindVenue($name: String!) {
+    FindVenue(name: $name) {
+        _id,
+        address
+
+    }
+}

@@ -34,8 +34,8 @@ query  Game {
 
 
 ##################
-GRAPHQL http://localhost:50002/query
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwNjA0OTcxN30.kFIxZdvwmLvqQnx62kxG4xBbiUxlG07ae_WmEKJvLFg
+GRAPHQL http://localhost:50002/graphql
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNjU2Nzk4Mn0.nqF7Evj_eto2Mfa5sO05GuiXzfU_cgoVn18kZf9sEro
 
 query IntrospectionQuery {
     __schema {
@@ -70,6 +70,19 @@ query  FindGame($name : String!) {
     }
 }
 {"name": "king"}
+
+
+####
+GRAPHQL http://localhost:50002/graphql
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNjU2Nzk4Mn0.nqF7Evj_eto2Mfa5sO05GuiXzfU_cgoVn18kZf9sEro
+
+
+query  FindVenue($name : String!) {
+    FindVenue(name: $name) {
+        address
+    }
+}
+{"name": "2"}
 
 ####
 GRAPHQL http://localhost:50002/graphql

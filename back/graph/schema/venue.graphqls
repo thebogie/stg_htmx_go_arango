@@ -16,5 +16,7 @@ input InputVenue {
     lng: String!
 }
 
-
+extend type Query {
+    FindVenue(name: String!): [Venue]!
+}
 

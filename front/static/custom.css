@@ -1,10 +1,15 @@
 main {
-    padding-top:65px; /* Adjust this value based on your navbar height */
+    padding-top:5px; /* Adjust this value based on your navbar height */
 }
 
 
+.container {
+    width: 800px;  /* Set a width for the container */
+    margin: 0 auto;  /* Center the container horizontally */
+    padding: 20px;  /* Add some padding inside the container */
+    border: 1px solid #ddd;  /* Add a border for visual separation */
+}
 
-#buttons
 .btn-extra-small {
     font-size: 0.6rem; /* Adjust the font size as needed */
     padding: 0.2rem 0.4rem; /* Adjust the padding as needed */
@@ -13,12 +18,13 @@ main {
     background-color: purple;
 }
 
+
 .scrollable-table {
     height: 400px;
     overflow-y: auto;
 }
 
-.table-container {
+.table_container {
     height: 400px;
     overflow-y: auto;
 }
@@ -35,4 +41,63 @@ table.striped > tbody > tr.selected {
     background-color: #3f51b5; /* Adjust as needed */
     color: white;
     cursor: pointer;
+}
+
+/**
+ * @license
+ * Copyright 2024 Google LLC. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/*
+ * Optional: Makes the sample page fill the window.
+ */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Prevent a flash of unstyled content before the custom element is defined.
+ */
+gmp-map:not(:defined) {
+    display: none;
+}
+
+#title {
+    color: #fff;
+    background-color: #4d90fe;
+    font-size: 25px;
+    font-weight: 500;
+    padding: 6px 12px;
+}
+
+#infowindow-content {
+    display: none;
+}
+
+.pac-card {
+    background-color: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+    margin: 10px;
+    font: 400 18px Roboto, Arial, sans-serif;
+    overflow: hidden;
+}
+
+.pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+}
+
+.pac-controls label {
+    font-size: 13px;
+    font-weight: 300;
+}
+
+#place-picker {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.5rem 1rem 1rem;
 }

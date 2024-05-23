@@ -22,9 +22,3 @@ func (f *Games) SortByName() {
 type FindGameAPI struct {
 	FindGame []Game `json:"FindGame"`
 }
-
-func (f *FindGameAPI) SortByName() {
-	sort.Slice(f.FindGame, func(i, j int) bool {
-		return f.FindGame[i].Name < f.FindGame[j].Name
-	})
-}
