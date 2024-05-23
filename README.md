@@ -27,8 +27,7 @@ docker-compose -f .\docker-compose.dev.yml up -d arangodb
 
 ## Upcoming
 - FrontEnd:
-  - add contest page
-    - figure out local zone in contest server side and update times. then send through to contest?
+  - add contest page -> save to DB
   - profile front page. what to hold in it? how to click through to show list of games and venue
   - add Testcontainers
 
