@@ -69,6 +69,7 @@ func venueSearch(w http.ResponseWriter, r *http.Request) {
 	if len(venuesFoundAPI.FindVenue) == 0 {
 		venuesFound, err = services.GetAddressListFromGoogleMaps(searchQuery)
 		if err != nil {
+			fmt.Println("Error:googlemap api issue")
 			return
 		}
 

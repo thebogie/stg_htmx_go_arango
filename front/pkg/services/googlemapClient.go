@@ -11,6 +11,7 @@ import (
 
 type Prediction struct {
 	Description string `json:"description"`
+	Place_ID    string `json:"place_id"`
 }
 
 type GoogleMapResponse struct {
@@ -44,8 +45,13 @@ func GetAddressListFromGoogleMaps(query string) (types.Venues, error) {
 		return venuesFound, fmt.Errorf("failed to read response body: %w", err)
 	}
 
-	for i, prediction := range response.Predictions {
-		fmt.Printf("Prediction %d: %s\n", i+1, prediction.Description)
+	for _, prediction := range response.Predictions {
+		var venue types.Venue
+
+		venue.PlaceID = prediction.Place_ID
+		venue.Address = prediction.Description
+
+		venuesFound.List = append(venuesFound.List, venue)
 	}
 
 	//foundData := string(jsonData)

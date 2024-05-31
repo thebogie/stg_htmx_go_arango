@@ -328,9 +328,10 @@
 
             // Get all table data cells (<td>) within the selected row
             const cells = tr.querySelectorAll('td');
-            console.log("cells" + cells);
+
             venueObj.address = cells[0].textContent;
             venueObj._id = cells[1].textContent;
+            venueObj.place_id = cells[2].textContent;
             addVenueToLocalStorage(venueObj)
 
             visualVenue = getContestFromLocalStorage().venue;
