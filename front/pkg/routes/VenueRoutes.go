@@ -26,7 +26,6 @@ func VenueRoutes() chi.Router {
 func venueSearch(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	var venuesFound types.Venues
-
 	//session := r.Context().Value("session").(*sessions.Session)
 	templates := template.Must(template.ParseFiles(
 		"static/templates/Venue/venueReturnSearch.html"))
@@ -61,23 +60,37 @@ func venueSearch(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var venuesFoundAPI types.FindVenueAPI
+	var venuesLocalFound types.Venues
+	var venuesGoogleFound types.Venues
+
 	err = json.Unmarshal(result, &venuesFoundAPI)
 	if err != nil {
 		fmt.Println("Error unmarshalling JSON:", err)
 		return
 	}
-	if len(venuesFoundAPI.FindVenue) == 0 {
-		venuesFound, err = services.GetAddressListFromGoogleMaps(searchQuery)
-		if err != nil {
-			fmt.Println("Error:googlemap api issue")
-			return
-		}
 
-	} else {
-		venuesFound.List = venuesFoundAPI.FindVenue
+	var markedVenues []types.Venue // Create an empty slice to store modified games
+	for _, venue := range venuesFoundAPI.FindVenue {
+		markedVenues = append(markedVenues, types.Venue{
+			InDatabase: true,
+			Id:         venue.Id,
+			Address:    venue.Address,
+			PlaceID:    venue.PlaceID,
+			Lat:        venue.Lat,
+			Lng:        venue.Lng,
+		})
+	}
+	venuesLocalFound.List = markedVenues
+
+	venuesGoogleFound, err = services.GetAddressListFromGoogleMaps(searchQuery)
+	if err != nil {
+		fmt.Println("Error:googlemap api issue")
+		return
 	}
 
-	venuesFound.SortByAddress()
+	venuesLocalFound.SortByAddress()
+	venuesGoogleFound.SortByAddress()
+	venuesFound.List = append(venuesLocalFound.List, venuesGoogleFound.List...)
 
 	// Parse the template file
 	err = templates.ExecuteTemplate(w, "venueReturnSearch.html", venuesFound)

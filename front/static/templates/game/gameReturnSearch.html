@@ -1,5 +1,11 @@
 {{range .List}}
+
+{{ if .InDatabase }}
+<tr style="font-weight: bold;">
+    {{else }}
 <tr>
+    {{end}}
+
     <td>{{.Name}}</td>
     <td>{{.YearPublished}}</td>
     <td>{{.BGGId}}</td>

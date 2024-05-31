@@ -7,6 +7,7 @@ type Game struct {
 	Name          string `json:"name"`
 	YearPublished int    `json:"year_published"`
 	BGGId         int    `json:"bgg_id"`
+	InDatabase    bool
 }
 
 type Games struct {

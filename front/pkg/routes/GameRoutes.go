@@ -61,23 +61,38 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Unmarshal the JSON data into the LoginUser Graphql struct
-	var gamesFoundAPI types.FindGameAPI
-	err = json.Unmarshal(result, &gamesFoundAPI)
+	var gamesLocalFoundAPI types.FindGameAPI
+	var gamesBGGFound types.Games
+	var gamesLocalFound types.Games
+	err = json.Unmarshal(result, &gamesLocalFoundAPI)
 	if err != nil {
 		fmt.Println("Error unmarshalling JSON:", err)
 		return
 	}
-	if len(gamesFoundAPI.FindGame) == 0 {
-		gamesFound, err = services.GetGameListFromBGG(searchQuery)
-		if err != nil {
-			return
-		}
 
-	} else {
-		gamesFound.List = gamesFoundAPI.FindGame
+	var markedGames []types.Game // Create an empty slice to store modified games
+	for _, game := range gamesLocalFoundAPI.FindGame {
+		markedGames = append(markedGames, types.Game{
+			InDatabase:    true,
+			Id:            game.Id,
+			Name:          game.Name,
+			YearPublished: game.YearPublished,
+			BGGId:         game.BGGId,
+		})
+	}
+	gamesLocalFound.List = markedGames
+
+	gamesBGGFound, err = services.GetGameListFromBGG(searchQuery)
+	if err != nil {
+		fmt.Println("BGG GetGameListFromBGG: ", err)
+		return
 	}
 
-	gamesFound.SortByName()
+	gamesLocalFound.SortByName()
+	gamesBGGFound.SortByName()
+
+	gamesFound.List = append(gamesLocalFound.List, gamesBGGFound.List...)
+
 	// Parse the template file
 	err = templates.ExecuteTemplate(w, "gameReturnSearch.html", gamesFound)
 	if err != nil {

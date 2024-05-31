@@ -3,11 +3,12 @@ package types
 import "sort"
 
 type Venue struct {
-	Id      string  `json:"_id"`
-	Address string  `json:"address"`
-	PlaceID string  `json:"place_id"`
-	Lat     float64 `json:"lat"`
-	Lng     float64 `json:"lng"`
+	Id         string  `json:"_id"`
+	Address    string  `json:"address"`
+	PlaceID    string  `json:"place_id"`
+	Lat        float64 `json:"lat"`
+	Lng        float64 `json:"lng"`
+	InDatabase bool
 }
 
 type Venues struct {

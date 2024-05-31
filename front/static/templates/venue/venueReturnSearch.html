@@ -1,5 +1,10 @@
 {{range .List}}
+
+{{ if .InDatabase }}
+<tr style="font-weight: bold;">
+    {{else }}
 <tr>
+    {{end}}
     <td>{{.Address}}</td>
     <td style="display: none;">{{.Id}}</td>
     <td style="display: none;">{{.PlaceID}}</td>
