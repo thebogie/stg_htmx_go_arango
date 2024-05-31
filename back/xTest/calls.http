@@ -24,7 +24,7 @@ mutation LoginUser($input: Login!) {
 
 ####
 GRAPHQL https://smacktalkgaming.com/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwMDI4MzQyNn0.yGJ12K17ZMLck_TmsMRlhXyTqgZRkBTkmUGKfi42JQA
+Authorization: {{AUTH_KEY}}
 
 query  Game {
     games { name }
@@ -35,7 +35,8 @@ query  Game {
 
 ##################
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNjU2Nzk4Mn0.nqF7Evj_eto2Mfa5sO05GuiXzfU_cgoVn18kZf9sEro
+Authorization: {{AUTH_KEY}}
+
 
 query IntrospectionQuery {
     __schema {
@@ -53,7 +54,7 @@ query IntrospectionQuery {
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNTQ1OTQ0M30.l2RebVUB6ASZF2ZnPDSB5ZsMw1nFypYQQ067sTwd2xk
+Authorization: {{AUTH_KEY}}
 
 query  Game {
 games { name }
@@ -62,10 +63,11 @@ games { name }
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNjE0ODkyNn0.JIMK8SuwSFXe0KugoGAvYmoJt-0NDUqggz-Hr3EyuEg
+Authorization: {{AUTH_KEY}}
 
 query  FindGame($name : String!) {
     FindGame(name: $name) {
+        _id,
         name
     }
 }
@@ -74,19 +76,19 @@ query  FindGame($name : String!) {
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNjU2Nzk4Mn0.nqF7Evj_eto2Mfa5sO05GuiXzfU_cgoVn18kZf9sEro
-
+Authorization: {{AUTH_KEY}}
 
 query  FindVenue($name : String!) {
     FindVenue(name: $name) {
+        _id,
         address
     }
 }
-{"name": "2"}
+{"name": "2613"}
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcxNTQ1OTQ0M30.l2RebVUB6ASZF2ZnPDSB5ZsMw1nFypYQQ067sTwd2xk
+Authorization: {{AUTH_KEY}}
 
 query  GetContestsPlayerTotalResults($player: String! ) {
 GetContestsPlayerTotalResults(player : $player)
@@ -114,8 +116,7 @@ _id
 
 ####
 GRAPHQL http://localhost:50002/graphql
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwODU0MDM1Nn0.KC3mQ9yOxfVbPUXeXE-Aqb8GeEmAglIAc6xkaJpGpGI
-
+Authorization: {{AUTH_KEY}}
 
 mutation CreateContest($contest: InputContest!) {
     CreateContest(contest: $contest)

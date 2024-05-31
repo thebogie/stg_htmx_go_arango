@@ -1,8 +1,23 @@
 
 ####
-POST https://www.googleapis.com/geolocation/v1/geolocate?key=
+POST https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyAQhyEYRH4UehDEaTJEhKCc8skeNb_FEQI
 
 
 
 
+####
+POST https://maps.googleapis.com/maps/api/place/textsearch/json?query=2613&key=AIzaSyAQhyEYRH4UehDEaTJEhKCc8skeNb_FEQI
 
+
+
+####
+GET https://maps.googleapis.com/maps/api/place/autocomplete/json
+    ?input=2613 W 10th
+    &types=geocode
+    &key={{GOOGLE_API_KEY}}
+
+
+####
+GET https://maps.googleapis.com/maps/api/place/details/json
+    ?place_id=ChIJJTTvQS6LXIYR2vH3T3r1ARo
+    &key={{GOOGLE_API_KEY}}

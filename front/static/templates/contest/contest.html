@@ -277,6 +277,7 @@
             gameObj.name = cells[0].textContent;
             gameObj.year_published = parseInt(cells[1].textContent);
             gameObj.bgg_id = parseInt(cells[2].textContent);
+            gameObj._id = cells[3].textContent;
 
 
             addGameToLocalStorage(gameObj)
@@ -327,13 +328,14 @@
 
             // Get all table data cells (<td>) within the selected row
             const cells = tr.querySelectorAll('td');
+            console.log("cells" + cells);
             venueObj.address = cells[0].textContent;
-
+            venueObj._id = cells[1].textContent;
             addVenueToLocalStorage(venueObj)
 
             visualVenue = getContestFromLocalStorage().venue;
 
-            selectedDataContainer.innerHTML =  + visualVenue.address ;
+            selectedDataContainer.innerHTML = visualVenue.address;
         }
 
     })

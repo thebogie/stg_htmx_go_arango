@@ -54,3 +54,4 @@ coverage/
 # gqlgen generated files
 graph/generated
 graph/model
+/xTest/http-client.private.env.json

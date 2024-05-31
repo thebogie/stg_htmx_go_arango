@@ -195,8 +195,8 @@ func (cr *contestrepository) FindVenue(ctx context.Context, findvenue *model.Inp
 	query := `
 FOR doc IN venue
 FILTER (UPPER(doc.address) == UPPER("` + findvenue.Address +
-		`")) OR ((doc.lat == "` + findvenue.Lng +
-		`") AND (doc.lng == "` + findvenue.Lat + `"))
+		`")) OR (doc.place_id == "` + findvenue.PlaceID +
+		`)
 RETURN doc
 `
 

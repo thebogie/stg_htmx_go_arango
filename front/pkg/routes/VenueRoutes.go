@@ -36,7 +36,7 @@ func venueSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	searchQuery := r.FormValue("Venue_search")
+	searchQuery := r.FormValue("venue_search")
 
 	gql, ok := services.GraphqlClientFromContext(ctx)
 	if !ok {
@@ -67,10 +67,10 @@ func venueSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if len(venuesFoundAPI.FindVenue) == 0 {
-		//venuesFound, err = services.GetGameListFromBGG(searchQuery)
-		//if err != nil {
-		//	return
-		//}
+		venuesFound, err = services.GetAddressListFromGoogleMaps(searchQuery)
+		if err != nil {
+			return
+		}
 
 	} else {
 		venuesFound.List = venuesFoundAPI.FindVenue
