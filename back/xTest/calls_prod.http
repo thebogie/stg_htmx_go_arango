@@ -1,6 +1,6 @@
 
 ####
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 #Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdGNoQGdtYWlsLmNvbSIsImV4cCI6MTcwMDI4MzQyNn0.yGJ12K17ZMLck_TmsMRlhXyTqgZRkBTkmUGKfi42JQA
 
 mutation LoginUser($input: Login!) {
@@ -23,29 +23,24 @@ mutation LoginUser($input: Login!) {
 }
 
 ####
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 Authorization: {{AUTH_KEY}}
 
 query  GetPlayer($player: InputUserData!) {
     GetPlayer(player: $player) {
-        _id
+        _key
     }
 }
 {
   "player": {
-    "_key": "",
-    "_id": "",
-    "_rev": "",
-    "firstname": "John Doe",
-    "email": "mitch@gmail.com",
-    "password": ""
+    "email": "mitch@gmail.com"
   }
 }
 
 
 
 ##################
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 Authorization: {{AUTH_KEY}}
 
 
@@ -64,16 +59,16 @@ query IntrospectionQuery {
 
 
 ####
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 Authorization: {{AUTH_KEY}}
 
-query  Games {
-Games { name }
+query  Game {
+games { name }
 }
 {}
 
 ####
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 Authorization: {{AUTH_KEY}}
 
 query  FindGame($name : String!) {
@@ -86,7 +81,7 @@ query  FindGame($name : String!) {
 
 
 ####
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 Authorization: {{AUTH_KEY}}
 
 query  FindVenue($name : String!) {
@@ -98,7 +93,7 @@ query  FindVenue($name : String!) {
 {"name": "2613"}
 
 ####
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 Authorization: {{AUTH_KEY}}
 
 query  GetContestsPlayerTotalResults($player: String! ) {
@@ -126,7 +121,7 @@ _id
 
 
 ####
-GRAPHQL http://localhost:50002/graphql
+GRAPHQL https://smacktalkgaming.com/graphql
 Authorization: {{AUTH_KEY}}
 
 mutation CreateContest($contest: InputContest!) {

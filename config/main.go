@@ -18,7 +18,7 @@ import (
 
 type Outcome struct {
 	Key      string `json:"_key"`
-	Playerid string `json:"playerid"`
+	PlayerID string `json:"player_id"`
 	Place    string `json:"place"`
 	Result   string `json:"result"`
 }
@@ -30,6 +30,7 @@ type Game struct {
 
 type Venue struct {
 	Key     string `json:"_key"`
+	PlaceID string `json:"place_id"`
 	Address string `json:"address"`
 	Lat     string `json:"lat"`
 	Lng     string `json:"lng"`
@@ -37,7 +38,7 @@ type Venue struct {
 
 type Player struct {
 	Key  string `json:"_key"`
-	Name string `json:"playerid"`
+	Name string `json:"player_id"`
 }
 
 type Played_At struct {
@@ -290,8 +291,8 @@ func main() {
 			exists = false
 			for _, x := range players.PlayerList {
 
-				playername = y.Playerid
-				if x.Name == y.Playerid {
+				playername = y.PlayerID
+				if x.Name == y.PlayerID {
 					exists = true
 					break
 				}
@@ -339,7 +340,7 @@ func main() {
 			var resultedin Resulted_In
 			resultedin.Key = gettimestamp()
 			resultedin.From = "contest/" + finalcontest.Key
-			resultedin.To = "player/" + players.findkey(r.Playerid)
+			resultedin.To = "player/" + players.findkey(r.PlayerID)
 			resultedin.Label = "RESULTED_IN"
 			resultedin.Place = r.Place
 			resultedin.Result = r.Result
@@ -369,37 +370,37 @@ func main() {
 	//log.Println("GAMES: %v", games)
 	gamesJSON, _ := json.Marshal(games.GameList)
 	log.Println("Creating games")
-	err = ioutil.WriteFile("stg_games.json", gamesJSON, 0777)
+	err = os.WriteFile("stg_games.json", gamesJSON, 0777)
 
 	//log.Println("VENUES: %v", venues.VenueList)
 	venuesJSON, _ := json.Marshal(venues.VenueList)
 	log.Println("Creating venues")
-	err = ioutil.WriteFile("stg_venues.json", venuesJSON, 0777)
+	err = os.WriteFile("stg_venues.json", venuesJSON, 0777)
 
 	//log.Println("PLAYERS: %v", players)
 	playersJSON, _ := json.Marshal(finalplayers)
 	log.Println("Creating players")
-	err = ioutil.WriteFile("stg_players.json", playersJSON, 0777)
+	err = os.WriteFile("stg_players.json", playersJSON, 0777)
 
 	//log.Println("FINAL: %v", finalcontests)
 	contestJSON, _ := json.Marshal(finalcontests)
 	log.Println("Creating contests")
-	err = ioutil.WriteFile("stg_contests.json", contestJSON, 0777)
+	err = os.WriteFile("stg_contests.json", contestJSON, 0777)
 
 	//log.Println("PLAYEDAT: %v", playedats)
 	playedatJSON, _ := json.Marshal(playedats)
 	log.Println("Creating played at")
-	err = ioutil.WriteFile("stg_playedat.json", playedatJSON, 0777)
+	err = os.WriteFile("stg_playedat.json", playedatJSON, 0777)
 
 	//log.Println("PLAYEWITH: %v", playwiths)
 	playedwithJSON, _ := json.Marshal(playedwiths)
 	log.Println("Creating played with")
-	err = ioutil.WriteFile("stg_playedwith.json", playedwithJSON, 0777)
+	err = os.WriteFile("stg_playedwith.json", playedwithJSON, 0777)
 
 	//log.Println("RESULTEDIN: %v", resultedins)
 	resultedinJSON, _ := json.Marshal(resultedins)
 	log.Println("Creating resulted in")
-	err = ioutil.WriteFile("stg_resultedin.json", resultedinJSON, 0777)
+	err = os.WriteFile("stg_resultedin.json", resultedinJSON, 0777)
 
 	//load it all into arango
 	loadtoarango(db, "player", finalplayers, 2)

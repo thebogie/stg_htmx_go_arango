@@ -166,6 +166,25 @@
 
 <div class="container mt-5">
     <h5>What is the outcome?</h5>
+    <div class="row">
+        <div id="outcome_popup" class="outcome_popup"></div>
+        <div id="outcome_table_div" class="col s8">
+
+        </div>
+        <div class="col s2">
+
+            <div class="input-field">
+
+                <select id="num_players">
+                </select>
+                <label for="num_players" class="flex-grow  block font-medium text-sm text-gray-700 mb-1">
+                    #players</label>
+
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 <script>
@@ -174,11 +193,16 @@
     document.addEventListener('htmx:afterOnLoad', function (event) {
         var elems = document.querySelectorAll('select');
         M.FormSelect.init(elems);
+
     });
 
+
+    //DATES
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     document.addEventListener('DOMContentLoaded', function () {
+        M.AutoInit();
+
         var elems = document.querySelectorAll('.datepicker');
         var instances = M.Datepicker.init(elems, {
             autoClose: true,
@@ -205,7 +229,7 @@
     });
     document.querySelector('#start_date').addEventListener('change', function () {
         startDateSync = true;
-        var selectedDate = this.value;
+        let selectedDate = this.value;
 
         if (startTimeSync && startDateSync) {
             helper_updateStart(selectedDate + ' ' + document.querySelector('#start_time').value)
@@ -231,7 +255,7 @@
 
     });
     document.querySelector('#end_time').addEventListener('change', function () {
-        var selectedTime = this.value;
+        let selectedTime = this.value;
         endTimeSync = true;
 
         console.log('start_date selected date:', selectedTime);
@@ -307,17 +331,17 @@
         game_select_table.style.display = "none";
     });
     document.getElementById("game_search").addEventListener("click", function () {
-        game_select_table = document.querySelector('#game_select_list')
+        let game_select_table = document.querySelector('#game_select_list')
         game_select_table.style.display = "block";
     });
 
     // VENUE
     document.getElementById("lock_venue_storage").addEventListener("click", function () {
-        game_select_table = document.querySelector('#venue_select_list')
+        let game_select_table = document.querySelector('#venue_select_list')
         game_select_table.style.display = "none";
     });
     document.getElementById("venue_search").addEventListener("click", function () {
-        game_select_table = document.querySelector('#venue_select_list')
+        let game_select_table = document.querySelector('#venue_select_list')
         game_select_table.style.display = "block";
     });
     document.querySelector('#venue_select_list').addEventListener('click', function (e) {
@@ -340,6 +364,128 @@
         }
 
     })
+
+
+    // OUTCOMES
+    setup_outcomes_num_players();
+    function setup_outcomes_num_players() {
+        const selectElement = document.querySelector("#num_players");
+        for (let i = 2; i <= 10; i++) {
+            const option = document.createElement("option");
+            option.value = i;
+            option.text = i + " player";
+            selectElement.appendChild(option);
+        }
+    }
+
+    document.getElementById("num_players").addEventListener("change", function () {
+        let outcome_table_div = document.querySelector('#outcome_table_div')
+        outcome_table_div.innerHTML = "";
+        let num_players = document.querySelector('#num_players')
+
+        let numCols = 3;
+        let numRows = 0;
+        if (num_players) {
+            numRows = parseInt(num_players.value);
+        }
+        console.log("numRows " + numRows);
+
+        // Create a new table element
+        const table = document.createElement("table");
+        table.id = "outcome_list";
+        table.classList.add("col", "highlight", "striped");
+        //table.style.width = "300px";
+        table.style.overflowX = "scroll";
+        table.style.overflowY = "scroll";
+
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+
+        // Create header cells
+        const playerHeader = document.createElement('th');
+        playerHeader.textContent = "Player Email";
+
+
+        const placeHeader = document.createElement('th');
+        placeHeader.textContent = "Place";
+
+
+        const resultHeader = document.createElement('th');
+        resultHeader.textContent = "Result";
+
+        // Append headers to the row
+        headerRow.appendChild(playerHeader);
+        headerRow.appendChild(placeHeader);
+        headerRow.appendChild(resultHeader);
+
+        // Append row to the head
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        // Create the table body
+        const tbody = document.createElement('tbody');
+        tbody.id = "outcome_list_data";
+
+
+        // Loop through the number of rows
+        for (let i = 0; i < numRows; i++) {
+            // Create a new table row element
+            const row = document.createElement("tr");
+
+            const player_search = document.createElement("td");
+
+            const playerSearchInput = document.createElement("input");
+            playerSearchInput.id = "player_search";
+            playerSearchInput.name = "player_search";
+            playerSearchInput.type = "text";
+            playerSearchInput.setAttribute('hx-post', '/player/search');
+            playerSearchInput.setAttribute('hx-target', '#outcome_popup');
+            playerSearchInput.setAttribute('hx-trigger', 'keyup changed delay:500ms');
+
+            player_search.appendChild(playerSearchInput);
+
+            const player_place = document.createElement("td");
+            const selectPlace = document.createElement("select");
+            for (let i = 1; i <= numRows; i++) {
+                const option = document.createElement("option");
+                option.value = i;
+                option.text = i;
+                selectPlace.appendChild(option);
+            }
+            player_place.appendChild(selectPlace);
+
+            const player_result = document.createElement("td");
+            const selectResult = document.createElement("select");
+            const optionWon = document.createElement("option");
+            optionWon.value = "won";
+            optionWon.text = "won";
+            selectResult.appendChild(optionWon);
+            const optionLost = document.createElement("option");
+            optionLost.value = "lost";
+            optionLost.text = "lost";
+            selectResult.appendChild(optionLost);
+            player_result.appendChild(selectResult);
+
+            row.appendChild(player_search);
+            row.appendChild(player_place);
+            row.appendChild(player_result);
+
+            // Append the row to the table
+            tbody.appendChild(row);
+        }
+        // Append head and body to the table
+        table.appendChild(thead);
+        table.appendChild(tbody);
+        outcome_table_div.appendChild(table);
+        const selects = document.querySelectorAll('select');
+        M.FormSelect.init(selects);
+
+        // Initialize Materialize CSS on the new input
+        M.updateTextFields();
+
+        // Manually process the new element with htmx
+        htmx.process(outcome_table_div);
+
+    });
 
 
 </script>

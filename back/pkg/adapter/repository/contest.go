@@ -476,7 +476,7 @@ func (cr *contestrepository) GetContestsPlayerTotalResults(ctx context.Context, 
 
 						repo, _ := NewUserRepository(cr.db).GetPlayer(ctx, mapItem["_to"].(string))
 
-						outcome_element.Player = &repo
+						outcome_element.Player = repo
 						// clear password...
 						outcome_element.Player.Password = ""
 

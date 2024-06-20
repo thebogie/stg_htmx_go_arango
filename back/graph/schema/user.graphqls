@@ -43,8 +43,14 @@ input Login {
 
 extend type Mutation {
     CreateUser(input: NewUser!): String!
+
+    #CreateUser(input: NewUser!): String!
     Login(input: Login!): String!
     LoginUser(input: Login!): LoginData!
     RefreshToken(input: RefreshTokenInput!): String!
+}
+
+extend type Query {
+    GetPlayer(player: InputUserData!): UserData!
 }
 

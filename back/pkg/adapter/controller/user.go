@@ -12,6 +12,7 @@ type UserController interface {
 	LoginUser(ctx context.Context, input model.Login) (*model.LoginData, error)
 	CheckLogin(ctx context.Context, player string) (string, error)
 	RefreshToken(ctx context.Context, input model.RefreshTokenInput) (string, error)
+	GetPlayer(ctx context.Context, player model.InputUserData) (*model.UserData, error)
 }
 
 type userController struct {
@@ -44,6 +45,12 @@ func (uc userController) LoginUser(ctx context.Context, input model.Login) (*mod
 		//TODO: fix how we throw error
 		//http.Error(ctx, "Forbidden", http.StatusForbidden)
 	}
+
+	return data, err
+}
+
+func (uc userController) GetPlayer(ctx context.Context, player model.InputUserData) (*model.UserData, error) {
+	data, err := uc.userUsecase.GetPlayer(ctx, player)
 
 	return data, err
 }

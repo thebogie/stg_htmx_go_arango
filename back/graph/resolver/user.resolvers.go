@@ -29,12 +29,20 @@ func (r *mutationResolver) RefreshToken(ctx context.Context, input model.Refresh
 	return r.User.RefreshToken(ctx, input)
 }
 
+// GetPlayer is the resolver for the GetPlayer field.
+func (r *queryResolver) GetPlayer(ctx context.Context, player model.InputUserData) (*model.UserData, error) {
+	return r.User.GetPlayer(ctx, player)
+}
+
 // !!! WARNING !!!
 // The code below was going to be deleted when updating resolvers. It has been copied here so you have
 // one last chance to move it out of harms way if you want. There are two reasons this happens:
 //   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
 //     it when you're done.
 //   - You have helper methods in this file. Move them out to keep these resolver files clean.
+func (r *mutationResolver) GetPlayer(ctx context.Context, player model.InputUserData) (*model.UserData, error) {
+	return r.User.GetPlayer(ctx, player)
+}
 func (r *queryResolver) Checklogin(ctx context.Context, player string) (string, error) {
 	return r.User.CheckLogin(ctx, player)
 }

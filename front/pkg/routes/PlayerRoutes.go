@@ -16,8 +16,10 @@ import (
 
 func PlayerRoutes() chi.Router {
 	r := chi.NewRouter()
-	r.Get("/login", PlayerLogin)
-	r.Post("/auth", PlayerAuth)
+	r.Get("/login", playerLogin)
+	r.Post("/auth", playerAuth)
+	r.Post("/search", playerSearch)
+
 	//r.Route("/{id}", func(r chi.Router) {
 	//	r.Get("/", getUserByID)
 	//	r.Put("/", updateUser)
@@ -26,7 +28,18 @@ func PlayerRoutes() chi.Router {
 	return r
 }
 
-func PlayerAuth(w http.ResponseWriter, r *http.Request) {
+func playerSearch(w http.ResponseWriter, r *http.Request) {
+	//ctx := r.Context()
+	//session := r.Context().Value("session").(*sessions.Session)
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func playerAuth(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	session := r.Context().Value("session").(*sessions.Session)
 
@@ -103,7 +116,7 @@ func PlayerAuth(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func PlayerLogin(w http.ResponseWriter, r *http.Request) {
+func playerLogin(w http.ResponseWriter, r *http.Request) {
 	// Parse templates
 	templates := template.Must(template.ParseFiles(
 		"static/templates/layout.html",
