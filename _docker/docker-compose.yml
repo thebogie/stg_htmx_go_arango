@@ -1,5 +1,19 @@
-version: "3.8"
+
 services:
+  redis:
+    image: redis:latest  # Use the official Redis image (latest tag)
+    container_name: stg-redis
+    ports:
+      - "6379:6379"  # Map the Redis port (6379) on the container to the host's port 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]  # Health check to ensure Redis is running
+      interval: 10s  # Check every 10 seconds
+      timeout: 5s  # Fail the container if it doesn't respond within 5 seconds
+      retries: 3  # Retry 3 times before considering the container unhealthy
+    networks:
+      # Networks to join (Services on the same network can communicate with each other using their name)
+      - stg
+
 
   arangodb:
     image: arangodb:latest
@@ -47,12 +61,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "50003:50003" # go chi server
-      - "6379:6379" #redis
     environment:
       DEV: "false"
 
-    #depends_on:
-    #- backend
+    depends_on:
+      - arangodb
+      - redis
+      - backend
+
     networks:
       # Networks to join (Services on the same network can communicate with each other using their name)
       - stg
