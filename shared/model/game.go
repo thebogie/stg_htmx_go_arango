@@ -1,6 +1,8 @@
-package types
+package model
 
-import "sort"
+import (
+	"sort"
+)
 
 type Game struct {
 	Id            string `json:"_id"`
